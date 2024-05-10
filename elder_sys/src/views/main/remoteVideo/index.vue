@@ -12,18 +12,18 @@
     </el-col>
     <el-col :span="9">
       <el-card style="width: 100%; margin-bottom: 5px">
-        <el-card style="width: 100%; margin-bottom: 5px">
+        <el-card style="width: 100%; margin-bottom: 5px" shadow="hover">
           <span style="align-items: center; font-weight: bold;">当前状态：</span>
           <el-tag type="primary" size="large" effect="light" >{{ latestData }}</el-tag>
         </el-card>
-        <el-card style="width: 100%; height: 50%; margin-bottom: 10px">
+        <el-card style="width: 100%; height: 50%; margin-bottom: 10px"  shadow="hover">
           <pie-chart />
         </el-card>
-        <el-card style="width: 100%; margin-bottom: 5px">
+        <el-card style="width: 100%; margin-bottom: 5px"  shadow="hover">
           <el-input v-model="Ename" clearable style="width: 80%;" placeholder="请输入老人姓名" />
           <el-button :icon="Search" @click="initElderly" style="margin-left: 5px; background-color: gray; width: 10%" />
         </el-card>
-        <el-card style="width: 100%; height: 125px">
+        <el-card style="width: 100%; height: 125px"  shadow="hover">
         <el-descriptions
             class="margin-top"
             :column="column"
@@ -162,4 +162,13 @@ onUnmounted(() => {
   }
 });
 </script>
+<style scoped>
+.el-card {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+.el-card:hover {
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.2);
+}
+</style>
 

@@ -5,7 +5,7 @@
 
   <el-row :gutter="20">
     <el-col :span="6">
-      <el-card>
+      <el-card shadow="hover">
         <template #header>
           <div class="card-header">
             <div class="card-panel">
@@ -23,7 +23,7 @@
       </el-card>
     </el-col>
     <el-col :span="6" style="margin-left: 1%">
-      <el-card>
+      <el-card shadow="hover">
         <template #header>
           <div class="card-header">
             <div class="card-panel">
@@ -110,5 +110,11 @@ import Goods from "@/views/main/trade/components/goods.vue";
     }
   }
 }
-
+.el-card {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+.el-card:hover {
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.2);
+}
 </style>

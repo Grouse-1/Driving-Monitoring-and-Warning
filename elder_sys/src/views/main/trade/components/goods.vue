@@ -1,74 +1,118 @@
 <script setup>
 import {Search} from "@element-plus/icons-vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import {GetFoods} from "@/api/getInfo/index.js";
+import {ElMessageBox} from "element-plus";
 
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-];
+const tableData = ref([]);
 const item = ref('')
 const dialogVisible = ref(false)
+const SumVisible = ref(false)
+const gridData = ref([])
+const currentData = ref({})
+const Fweight = ref()
+const allMoney = ref(0)
+const elder = ref({
+  name: null
+})
 
 const getFood =()=>{
-  dialogVisible.value = true
+  console.log(item.value)
+  GetFoods.Info(item).then((res)=>{
+    console.log(res.data)
+    gridData.value = res.data
+  })
 
+  dialogVisible.value = true
 }
 
-const gridData = [
-  {
-    date: '2016-05-02',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-04',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-01',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-03',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-]
+const handleCurrentChange = (selection) => {
+  currentData.value = selection
+}
 
 const handleConfirm = () => {
+  //console.log(currentData.value)
+  ElMessageBox.prompt('请输入食物质量', '添加质量', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    // inputPattern:
+    //     /[^0-9.]/,
+    inputErrorMessage: '未知质量',
+  }).then(value => {
+    Fweight.value = value.value
+    console.log(Fweight.value)
+    const newFoodItem = {
+      name: currentData.value.name,
+      quantity: Fweight.value,
+      price: currentData.value.price,
+      money: currentData.value.price * Fweight.value
+    };
+    tableData.value.push(newFoodItem)
+    currentData.value = null
+  })
+  //tableData.value.push(currentData.value)
+
   dialogVisible.value = false
 }
 
 const handleClose = () => {
   dialogVisible.value = false
 }
+
+const deletFood = () =>{
+  tableData.value.pop(currentData.value)
+  currentData.value = null
+}
+
+const clearFood = () => {
+  tableData.value = []
+}
+
+const summary = () => {
+  SumVisible.value = true
+}
+
+const getElder = () =>{
+
+}
+
+watch(tableData, (newVal, oldVal) => {
+  let sum = 0;
+  for (const item of newVal) {
+  sum += item.money;
+  console.log("money", item.money);
+  }
+  allMoney.value = sum;
+
+}, { deep: true });
+
 </script>
 
 <template>
   <el-row :gutter="20">
     <el-col :span="17">
-      <el-card style="margin-bottom: 5px">
-        <el-input
-            v-model="item"
-            style="max-width: 240px"
-            size="large"
-            placeholder="搜索菜品或食物"
-            class="input-with-select"
-        ><template #suffix>
-            <el-button type="text" :icon="Search" @click="getFood" />
-          </template>
-        </el-input>
+      <el-card style="margin-bottom: 5px;">
+        <div class="input-container">
+          <el-input
+              v-model="item"
+              style="max-width: 240px;"
+              size="large"
+              placeholder="搜索菜品或食物"
+              class="input-with-select"
+          >
+            <template #suffix>
+              <el-button type="text" :icon="Search" @click="getFood" />
+            </template>
+          </el-input>
+          <div class="settlement">总价：{{allMoney}}</div>
+        </div>
       </el-card>
       <el-card>
-        <el-table :data="tableData" height="350" style="width: 100%">
+        <el-table :data="tableData" height="325" style="width: 100%" highlight-current-row @current-change="handleCurrentChange">
           <el-table-column prop="name" label="名字" width="180" />
-          <el-table-column prop="date" label="数量(kg)" width="180" />
-          <el-table-column prop="address" label="单价/元" />
+          <el-table-column prop="quantity" label="数量(kg)" width="180" />
+          <el-table-column prop="price" label="单价/元" width="180" />
+          <el-table-column prop="money" label="价格" />
         </el-table>
       </el-card>
       <el-dialog v-model="dialogVisible"width="800">
@@ -78,9 +122,9 @@ const handleClose = () => {
           </div>
         </template>
         <el-card>
-        <el-table :data="gridData">
+        <el-table :data="gridData" height="325" highlight-current-row style="width: 100%"  @current-change="handleCurrentChange">
           <el-table-column prop="name" label="名字" width="180" />
-          <el-table-column prop="address" label="单价/元" />
+          <el-table-column prop="price" label="单价/元" />
         </el-table>
         </el-card>
         <template #footer>
@@ -100,11 +144,27 @@ const handleClose = () => {
             <span style="font-weight: bold; font-size: 16px;">功能区</span>
           </div>
         </template>
-        <el-button>删除商品</el-button>
-        <el-button>清空商品</el-button>
-        <el-button>结算</el-button>
+        <el-button @click="deletFood">删除商品</el-button>
+        <el-button @click="clearFood">清空商品</el-button>
+        <el-button @click="summary">结算</el-button>
 
       </el-card>
+      <el-dialog v-model="SumVisible" title="结算" width="500">
+        <el-form :model="elder">
+          <el-form-item label="顾客姓名" :label-width="140">
+            <el-input v-model="elder.name"/>
+            <el-button type="success" @click="getElder" style="margin-left: 24px">扫描</el-button>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+<!--            <el-button @click="dialogFormVisible = false">Cancel</el-button>-->
+<!--            <el-button type="primary" @click="dialogFormVisible = false">-->
+<!--              Confirm-->
+<!--            </el-button>-->
+          </div>
+        </template>
+      </el-dialog>
     </el-col>
 
   </el-row>
@@ -112,5 +172,19 @@ const handleClose = () => {
 </template>
 
 <style scoped lang="scss">
-
+.el-card {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+.el-card:hover {
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.2);
+}
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 调整元素之间的间距 */
+}
+.settlement {
+  margin-left: auto; /* 调整间距 */
+}
 </style>

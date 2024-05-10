@@ -128,6 +128,21 @@ export const GetPlant = {
 
 };
 
+export const GetFoods = {
+    Info: (info) => {
+        return axios.get('/api/info/food', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                name: info.value,
+            },
+            timeout: 5000
+        });
+    },
+
+};
+
 export default {
     GetAdmin,
     GetElderly,
