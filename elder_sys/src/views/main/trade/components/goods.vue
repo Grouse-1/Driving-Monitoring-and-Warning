@@ -3,6 +3,7 @@ import {Search} from "@element-plus/icons-vue";
 import {ref, watch} from "vue";
 import {GetFoods} from "@/api/getInfo/index.js";
 import {ElMessageBox} from "element-plus";
+import {addPay} from "@/api/Pay/index.js";
 
 const tableData = ref([]);
 const item = ref('')
@@ -15,6 +16,8 @@ const allMoney = ref(0)
 const elder = ref({
   name: null
 })
+const shopId = ref(3)
+const elderId = ref(1)
 
 const getFood =()=>{
   console.log(item.value)
@@ -28,6 +31,7 @@ const getFood =()=>{
 
 const handleCurrentChange = (selection) => {
   currentData.value = selection
+  //查询商品的id，并存储----------
 }
 
 const handleConfirm = () => {
@@ -40,12 +44,14 @@ const handleConfirm = () => {
     inputErrorMessage: '未知质量',
   }).then(value => {
     Fweight.value = value.value
-    console.log(Fweight.value)
     const newFoodItem = {
-      name: currentData.value.name,
+      goodsname: currentData.value.name,
       quantity: Fweight.value,
       price: currentData.value.price,
-      money: currentData.value.price * Fweight.value
+      money: currentData.value.price * Fweight.value,
+      shopid: shopId.value,
+      elderid: elderId.value,
+      //goodsid: goodId.value
     };
     tableData.value.push(newFoodItem)
     currentData.value = null
@@ -73,7 +79,16 @@ const summary = () => {
 }
 
 const getElder = () =>{
+//返回姓名和id,姓名展示，id存储-------------
+}
+const payConfirm = () => {
+  //对tableDate进行判空
+  addPay.Info(tableData.value).then((res)=>{})
+  SumVisible.value = false
+}
 
+const payClose = () =>{
+  SumVisible.value = false
 }
 
 watch(tableData, (newVal, oldVal) => {
@@ -109,7 +124,7 @@ watch(tableData, (newVal, oldVal) => {
       </el-card>
       <el-card>
         <el-table :data="tableData" height="325" style="width: 100%" highlight-current-row @current-change="handleCurrentChange">
-          <el-table-column prop="name" label="名字" width="180" />
+          <el-table-column prop="goodsname" label="名字" width="180" />
           <el-table-column prop="quantity" label="数量(kg)" width="180" />
           <el-table-column prop="price" label="单价/元" width="180" />
           <el-table-column prop="money" label="价格" />
@@ -151,9 +166,30 @@ watch(tableData, (newVal, oldVal) => {
       </el-card>
       <el-dialog v-model="SumVisible" title="结算" width="500">
         <el-form :model="elder">
-          <el-form-item label="顾客姓名" :label-width="140">
-            <el-input v-model="elder.name"/>
-            <el-button type="success" @click="getElder" style="margin-left: 24px">扫描</el-button>
+
+          <el-form-item>
+            <el-col :span="24">
+              <el-descriptions
+                  class="margin-top"
+                  size="default"
+                  column="1"
+                  border
+              >
+                <el-descriptions-item label="顾客姓名" width="150px">
+                  {{elder.name}}<el-button type="success" style="margin-left: 75%" @click="getElder">扫描</el-button>
+                </el-descriptions-item>1
+
+                <el-descriptions-item label="应付金额" width="150px">
+                  {{allMoney}}
+                </el-descriptions-item>
+              </el-descriptions>
+              <div style="margin-top: 40px; text-align: center">
+                <el-button type="primary" @click="payConfirm">
+                  确认支付
+                </el-button>
+                <el-button @click="payClose">取消支付</el-button>
+              </div>
+            </el-col>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -186,5 +222,9 @@ watch(tableData, (newVal, oldVal) => {
 }
 .settlement {
   margin-left: auto; /* 调整间距 */
+}
+.cell-item {
+  display: flex;
+  align-items: center;
 }
 </style>
