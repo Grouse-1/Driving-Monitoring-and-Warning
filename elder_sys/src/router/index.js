@@ -54,30 +54,44 @@ const router = createRouter({
           name: 'schedule',
           component: () => import('@/views/main/schedule/index.vue')
         },
-        {
-          path: 'outanalysis',
-          name: 'outanalysis',
-          component: () => import('@/views/main/outanalysis/index.vue')
-        },
+
         {
           path: 'outstate',
           name: 'outstate',
           component: () => import('@/views/main/outstate/index.vue')
+        },{
+          path: 'dangerpre',
+          name: 'dangerpre',
+          component: () => import('@/views/main/dangerpre/index.vue')
         },
         {
           path: 'remoteVideo',
           name: 'remoteVideo',
           component: () => import('@/views/main/remoteVideo/index.vue')
         },
-        {
-          path: 'Eshoppinginfo',
-          name: 'Eshoppinginfo',
-          component: () => import('@/views/main/Eshoppinginfo/index.vue')
-        },
+
         {
           path: 'trade',
           name: 'trade',
           component: () => import('@/views/main/trade/index.vue')
+        },
+        {
+          path: 'analysis',
+          name: 'analysis',
+          component: () => import('@/views/main/analysis/index.vue'),
+          children: [
+            {
+              path: 'Eshoppinginfo',
+              name: 'Eshoppinginfo',
+              component: () => import('@/views/main/analysis/Eshoppinginfo/index.vue')
+            },
+            {
+              path: 'outanalysis',
+              name: 'outanalysis',
+              component: () => import('@/views/main/analysis/outanalysis/index.vue')
+            }
+          ]
+
         },
       ]
     },

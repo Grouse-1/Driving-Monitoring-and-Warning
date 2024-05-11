@@ -162,16 +162,17 @@ watch(tableData, (newVal, oldVal) => {
       </el-dialog>
     </el-col>
     <el-col :span="7">
-      <el-card>
+      <el-card style="height: 325px; margin-left: 15%">
         <template #header>
           <div class="card-header">
             <span style="font-weight: bold; font-size: 16px;">功能区</span>
           </div>
         </template>
-        <el-button @click="deletFood">删除商品</el-button>
-        <el-button @click="clearFood">清空商品</el-button>
-        <el-button @click="summary">结算</el-button>
-
+        <div class="button-group">
+        <el-button  class="custom-button" @click="deletFood" type="danger">删除商品</el-button>
+        <el-button  class="custom-button" @click="clearFood" type="warning">清空商品</el-button>
+        <el-button  class="custom-button" @click="summary" type="success">结算</el-button>
+        </div>
       </el-card>
       <el-dialog v-model="SumVisible" title="结算" width="500">
         <el-form :model="elder">
@@ -236,4 +237,28 @@ watch(tableData, (newVal, oldVal) => {
   display: flex;
   align-items: center;
 }
+.card-header {
+  padding: 10px 16px;
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #ebeef5;
+  border-radius: 4px 4px 0 0;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+.custom-button {
+  margin-bottom: 10px;
+  width: 120px;
+}
+.button-group {
+  display: flex;
+  flex-direction: column; /* 将按钮垂直排列 */
+  justify-content: center; /* 垂直居中对齐 */
+  align-items: center; /* 水平居中对齐 */
+  padding: 20px;
+}
+.custom-button:first-child {
+  margin-left: 12px; /* 将第一个按钮的右边距设为0 */
+}
+
 </style>

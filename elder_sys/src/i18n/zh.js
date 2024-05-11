@@ -22,6 +22,9 @@ export default {
     familyInfo: "家属信息",
     sellerInfo: "菜市场商户信息",
     plantInfo: "植物信息",
+    analysis: "数据分析与决策",
+    schedule:"出行日程记录",
+    dangerpre: "危险预警",
   },
   login: {
     title: '用户登录',
