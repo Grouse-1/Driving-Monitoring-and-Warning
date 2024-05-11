@@ -143,6 +143,37 @@ export const GetFoods = {
 
 };
 
+export const GetTrans = {
+    Info: (info) => {
+        return axios.get('/api/info/transcount', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                shopid: info,
+            },
+            timeout: 5000
+        });
+    },
+
+};
+
+export const GetSeven = {
+    Info: (info) => {
+        return axios.get('/api/info/sevenIncome', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                shopid: info,
+            },
+            timeout: 5000
+        });
+    },
+
+};
+
+
 export default {
     GetAdmin,
     GetElderly,
@@ -150,5 +181,7 @@ export default {
     GetFamily,
     GetRfid,
     GetNum,
-    GetPlant
+    GetPlant,
+    GetTrans,
+    GetSeven
 };

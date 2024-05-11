@@ -4,6 +4,7 @@ import {ref, watch} from "vue";
 import {GetFoods} from "@/api/getInfo/index.js";
 import {ElMessageBox} from "element-plus";
 import {addPay} from "@/api/Pay/index.js";
+import { defineEmits } from 'vue';
 
 const tableData = ref([]);
 const item = ref('')
@@ -18,6 +19,10 @@ const elder = ref({
 })
 const shopId = ref(3)
 const elderId = ref(1)
+const emit = defineEmits(['handleId']);
+const props = defineProps({
+  initView: Function
+})
 
 const getFood =()=>{
   console.log(item.value)
@@ -59,6 +64,7 @@ const handleConfirm = () => {
   //tableData.value.push(currentData.value)
 
   dialogVisible.value = false
+
 }
 
 const handleClose = () => {
@@ -85,6 +91,9 @@ const payConfirm = () => {
   //对tableDate进行判空
   addPay.Info(tableData.value).then((res)=>{})
   SumVisible.value = false
+  tableData.value = []
+  emit('handleId', shopId);
+  props.initView()
 }
 
 const payClose = () =>{
