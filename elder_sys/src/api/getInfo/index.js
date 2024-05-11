@@ -173,6 +173,21 @@ export const GetSeven = {
 
 };
 
+export const GetBuyData = {
+    Info: (info) => {
+        return axios.get('/api/info/buydata', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                elderid: info,
+            },
+            timeout: 5000
+        });
+    },
+
+};
+
 
 export default {
     GetAdmin,
@@ -183,5 +198,6 @@ export default {
     GetNum,
     GetPlant,
     GetTrans,
-    GetSeven
+    GetSeven,
+    GetBuyData
 };
