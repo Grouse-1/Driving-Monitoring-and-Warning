@@ -214,6 +214,18 @@ export const GetEmotion = {
 
 };
 
+export const GetTravel = {
+    Info: () => {
+        return axios.get('/api/info/travel', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            timeout: 5000
+        });
+    },
+
+};
+
 export default {
     GetAdmin,
     GetElderly,
@@ -226,5 +238,6 @@ export default {
     GetSeven,
     GetBuyData,
     GetAdvise,
-    GetEmotion
+    GetEmotion,
+    GetTravel
 };

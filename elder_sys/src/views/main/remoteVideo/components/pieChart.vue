@@ -10,7 +10,7 @@ import {GetEmotion} from "@/api/getInfo/index.js";
 const dialog = ref(null);
 const option = ref({
   title: {
-    text: '今日心情',
+    text: '最近心情',
     subtext: '',
     left: 'center'
   },

@@ -12,7 +12,9 @@ import Header from './headers/index.vue'
       <el-aside width="210px" class="sidebar-container"><Menu/></el-aside>
       <el-container class="container">
         <el-header><Header/></el-header>
-        <el-main><router-view /></el-main>
+        <el-main>
+          <router-view />
+        </el-main>
       </el-container>
     </el-container>
   </div>

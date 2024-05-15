@@ -47,11 +47,16 @@ app.config.globalProperties.$echarts = echarts;
 // })
 
 
-document.title = '银发科技';
-document.querySelector('link[rel="icon"]').setAttribute('href', './src/styles/img/111111.webp');
+// document.title = '银发科技';
+// document.querySelector('link[rel="icon"]').setAttribute('href', './src/styles/img/111111.webp');
+const setPageIcon = () => {
+    document.title = '银发科技'
+}
+
 app .use(ElementPlus, { locale: zhCn })
     .use(router)
     .use(pinia)
     .use(store)
     .use(i18n)
+    .use(setPageIcon)
     .mount('#app')

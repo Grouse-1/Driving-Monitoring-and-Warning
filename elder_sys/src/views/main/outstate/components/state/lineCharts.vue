@@ -14,7 +14,7 @@ const locationName = ref("菜市场");
 let xAxisData = [];
 const lineData = ref([0,0,0,0,0,0,0,0,0,0,0]);
 let ws = null;
-const latestData = ref('');//'happy', 'normal', 'angry', 'sad', 'sleepy'
+const latestData = ref('normal');//'happy', 'normal', 'angry', 'sad', 'sleepy'
 const dict = ref({
   'happy': 1,
   'normal': 2,
