@@ -11,7 +11,7 @@ export default {
     orders: '订单列表',
     reports: '数据报表',
     baseinfo: '基本信息管理',
-    outstate: '出行状态',
+    outstate: '出行状态与定位',
     remoteVideo: '远程视频',
     dangerreport: '危险预警',
     outanalysis: '出行决策分析',

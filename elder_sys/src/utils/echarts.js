@@ -8,7 +8,7 @@ import {
     TooltipComponent,
     GridComponent,
     DatasetComponent,
-    TransformComponent, ToolboxComponent, VisualMapComponent,
+    TransformComponent, ToolboxComponent, VisualMapComponent,LegendComponent
 } from "echarts/components";
 // 标签自动布局，全局过渡动画等特性
 import { LabelLayout, UniversalTransition } from "echarts/features";
@@ -28,7 +28,8 @@ echarts.use([
     LineChart,
     ToolboxComponent,
     VisualMapComponent,
-    PieChart
+    PieChart,
+    LegendComponent
 ]);
 // 导出
 export default echarts;

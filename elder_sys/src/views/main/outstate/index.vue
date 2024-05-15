@@ -23,7 +23,7 @@
     <el-col :span="16">
       <el-row >
         <el-card style="text-align: center;width: 75%; margin-right: 5px">
-        <template #header>老人状态</template>
+        <template #header>老人实时状态</template>
         <line-chart/>
         </el-card>
         <el-card style="text-align: center;width: 24%"  >

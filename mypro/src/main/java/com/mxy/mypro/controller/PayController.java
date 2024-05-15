@@ -53,6 +53,9 @@ public class PayController {
         ArrayList<String> res = new ArrayList<>();
         String res1 = String.valueOf(payService.getTransCount(shopid, currentDay));
         String res2 = String.valueOf(payService.gettransMoney(shopid, currentDay));
+        if(res2.equals("null")){
+            res2 = "0";
+        }
         res.add(res1);
         res.add(res2);
         System.out.println(res);

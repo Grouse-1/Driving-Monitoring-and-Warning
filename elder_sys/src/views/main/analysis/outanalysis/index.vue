@@ -1,16 +1,16 @@
 <template>
-  <!--  1.老人买菜购买记录-->
-  <!--  2.当月买菜类别占比-->
-  <!--    谷物类 肉蛋奶类  豆类及其制品类 蔬菜水果类  油脂坚果类-->
-
-  <!--  3.老人饮食标准显示-->
-  <!--    碳水化合物  蛋白质  维生素 膳食纤维 油脂-->
-  <!--  -->
-  <!--  4.给出老人食物购买推荐建议-->
+<!--1.老人出行记录-->
+<!--2.老人犯困时间点-->
+<!--3.根据老人开心活动场所给出建议-->
+<!--4.根据犯困时间给出出门时间推荐-->
   <el-row :gutter = "20" >
     <el-col :span="12" >
       <el-card>
-        老人买菜购买记录
+        <template #header>
+          <div class="card-header">
+            <span class="card-title">老人出行记录</span>
+          </div>
+        </template>
         <div class="table-container">
           <div class="search-bar">
             <el-input v-model="search" size="large" placeholder="Type to search" />
@@ -20,8 +20,8 @@
               style="width: 100%; height: 520px"
               :default-sort="{ prop: 'date', order: 'descending' }"
           >
-            <el-table-column label="Date" prop="date" sortable width="120" />
-            <el-table-column label="Name" prop="name" />
+            <el-table-column label="时间" prop="date" sortable width="240" />
+            <el-table-column label="出行地点" prop="name" />
             <!-- 其他需要添加的 el-table-column -->
           </el-table>
         </div>
@@ -29,7 +29,11 @@
     </el-col>
     <el-col :span="12" >
       <el-card>
-        图表占比处
+        老人频繁犯困时间点
+        老人开心活动地点
+
+        出行建议之避开犯困时间点
+        出行建议之多去开心活动场所
       </el-card>
     </el-col>
   </el-row>
@@ -96,5 +100,44 @@ const tableData = [
 
 .search-bar {
   margin-bottom: 16px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #303133;
+}
+.divTitle {
+  font-size: 18px;
+  font-weight: bold;
+  color: #464646;
+}
+.advice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+}
+
+.advice-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.advice-content {
+  font-size: 14px;
+}
+
+.category-list {
+  margin-top: 5px;
+  color: #666;
 }
 </style>

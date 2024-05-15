@@ -13,8 +13,8 @@
     <el-col :span="9">
       <el-card style="width: 100%; margin-bottom: 5px">
         <el-card style="width: 100%; margin-bottom: 5px" shadow="hover">
-          <span style="align-items: center; font-weight: bold;">当前状态：</span>
-          <el-tag type="primary" size="large" effect="light" >{{ latestData }}</el-tag>
+          <span style="align-items: center; font-weight: bold;margin-right: 20px">当前状态：</span>
+          <el-tag :type="Etype" size="large" effect="light" style="width: 200px">{{ latestData.value}}</el-tag>
         </el-card>
         <el-card style="width: 100%; height: 50%; margin-bottom: 10px"  shadow="hover">
           <pie-chart />
@@ -94,6 +94,7 @@ import {GetElderly} from "@/api/getInfo/index.js";
 const size = 'default'
 const direction = ref('horizontal');
 const column = ref(2)
+const Etype = ref('primary')
 const form = ref({
   name: '暂无',
   age: '暂无',
@@ -110,6 +111,13 @@ const LocationKV = ref({
   1: '菜市场',
   2: '公园'
 })
+const dict = ref({
+  happy: '愉快',
+  sad:'难过',
+  normal: '平静',
+  sleepy: '犯困',
+  angry: '其他',
+})
 
 const connectWebSocket = () => {
   // 这里的地址ws://localhost:3000需要替换为你的WebSocket服务端地址
@@ -119,9 +127,16 @@ const connectWebSocket = () => {
     console.log('WebSocket连接已打开');
   };
 
+  //显示实时表情
   ws.onmessage = (event) => {
     console.log('接收到消息:', event.data);
-    latestData.value = event.data;
+    const dataArray = event.data.split(':');
+    latestData.value = ref(dict.value[dataArray[0]]);
+    if(dataArray[0] === "sleepy"){
+      Etype.value = "danger";
+    } else {
+      Etype.value = "primary";
+    }
     //messages.value.push({ id: messages.value.length, data: event.data });
   };
 

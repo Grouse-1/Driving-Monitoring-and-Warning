@@ -7,17 +7,28 @@ public class BuyData {
     private float price;
     private float money;
     private String shopname;
+    private String gtype;
+
 
     @Override
     public String toString() {
         return "BuyData{" +
-                "date='" + tdate + '\'' +
+                "tdate='" + tdate + '\'' +
                 ", name='" + name + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 ", money=" + money +
                 ", shopname='" + shopname + '\'' +
+                ", gtype='" + gtype + '\'' +
                 '}';
+    }
+
+    public String getGtype() {
+        return gtype;
+    }
+
+    public void setGtype(String gtype) {
+        this.gtype = gtype;
     }
 
     public String getShopname() {

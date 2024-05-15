@@ -189,6 +189,31 @@ export const GetBuyData = {
 };
 
 
+export const GetAdvise = {
+    Info: (info) => {
+        const data = JSON.stringify(info); // 将数组转换为JSON字符串
+        return axios.post('/api/info/getadvise', data, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            timeout: 5000
+        });
+    }
+};
+
+
+export const GetEmotion = {
+    Info: () => {
+        return axios.get('/api/info/emotion', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            timeout: 5000
+        });
+    },
+
+};
+
 export default {
     GetAdmin,
     GetElderly,
@@ -199,5 +224,7 @@ export default {
     GetPlant,
     GetTrans,
     GetSeven,
-    GetBuyData
+    GetBuyData,
+    GetAdvise,
+    GetEmotion
 };

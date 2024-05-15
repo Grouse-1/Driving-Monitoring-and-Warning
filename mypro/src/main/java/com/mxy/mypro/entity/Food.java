@@ -11,6 +11,8 @@ public class Food {
     private String name;
     private float price;
     private Integer shopid;
+    private String gtype;
+
 
     @Override
     public String toString() {
@@ -19,7 +21,16 @@ public class Food {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", shopid=" + shopid +
+                ", gtype='" + gtype + '\'' +
                 '}';
+    }
+
+    public String getGtype() {
+        return gtype;
+    }
+
+    public void setGtype(String gtype) {
+        this.gtype = gtype;
     }
 
     public Integer getId() {

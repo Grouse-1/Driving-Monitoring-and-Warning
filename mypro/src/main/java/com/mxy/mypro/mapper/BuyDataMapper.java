@@ -15,7 +15,8 @@ public interface BuyDataMapper {
             "    td.quantity, " +
             "    g.price, " +
             "    td.money, " +
-            "    s.shopname " +
+            "    s.shopname, " +
+            "    g.gtype " +
             "FROM " +
             "    `transaction` t " +
             "JOIN " +
