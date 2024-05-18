@@ -58,8 +58,8 @@ public class loginController {
         if(list == null || list.isEmpty()) {
             return Result.error("用户名或密码错误");
         }
-        String token = JwtUtils.createToken(role.getName()+":"+role.getRole());
-        return Result.ok("提交成功").data("token", token);
+        String mytoken = JwtUtils.createToken(role.getName()+":"+role.getRole());
+        return Result.ok("提交成功").data("token", mytoken);
     }
     @PostMapping("/info")
     public Result info(String token){

@@ -1,3 +1,8 @@
+<!--验证码的生成：-->
+<!--1.随机生成验证码字符串-->
+<!--2.创建画布设置背景(颜色)，使用HTML5的canvas画布-->
+<!--3.绘制验证码字符(前部分生成的)-->
+<!--4.添加干扰元素(干扰线和干扰点)-->
 <template>
   <div class="s-canvas">
     <canvas id="s-canvas" :width="props.contentWidth" :height="props.contentHeight"></canvas>
