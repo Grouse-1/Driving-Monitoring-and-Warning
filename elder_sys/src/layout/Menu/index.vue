@@ -1,47 +1,45 @@
-<!--active-text-color="#ffd04b" //当前标签颜色-->
-
 <template>
   <el-row class="tac">
     <el-col>
-      <h1 style="text-align: center; padding-top: 10px; color: white">银发科技</h1>
-      <h5 style="text-align: center; padding-top: 5px; padding-bottom: 5px; color: white">驾驶出行-生活辅助</h5>
+      <div class="header">
+        <h1 class="title">银发科技</h1>
+        <h5 class="subtitle">驾驶出行-生活辅助</h5>
+      </div>
       <el-menu
           default-active="2"
           class="el-menu--vertical"
-          background-color="#304156"
-          text-color="#fff"
-          active-text-color="#ffd04b"
+          background-color="#F5F7FA"
+          text-color="#303133"
+          active-text-color="#409EFF"
           router
           unique-opened
       >
-          <template v-for="item in menuList">
-            <el-sub-menu v-if="item.children && item.children.length" :index="item.id">
+        <template v-for="item in menuList">
+          <el-sub-menu v-if="item.children && item.children.length" :index="item.id">
+            <template #title>
+              <el-icon>
+                <component :is="item.icon"></component>
+              </el-icon>
+              <span>{{ item.authName }}</span>
+            </template>
+            <el-menu-item v-for="child in item.children" :key="child.id" :index="`/${item.path}/${child.path}`">
               <template #title>
                 <el-icon>
-                  <component :is=item.icon></component>
+                  <component :is="child.icon"></component>
                 </el-icon>
-                <span>{{ item.authName }}</span>
-              </template>
-              <el-menu-item v-for="child in item.children" :key="child.id" :index="`/${item.path}/${child.path}`">
-                <template #title>
-                  <el-icon>
-                    <component :is=child.icon></component>
-                  </el-icon>
-                  <span>{{ child.authName }}</span>
-                </template>
-              </el-menu-item>
-            </el-sub-menu>
-            <el-menu-item v-else :index="`/${item.path}`">
-              <template #title>
-                <el-icon>
-                  <component :is=item.icon></component>
-                </el-icon>
-                <span>{{ item.authName }}</span>
+                <span>{{ child.authName }}</span>
               </template>
             </el-menu-item>
-          </template>
-
-
+          </el-sub-menu>
+          <el-menu-item v-else :index="`/${item.path}`">
+            <template #title>
+              <el-icon>
+                <component :is="item.icon"></component>
+              </el-icon>
+              <span>{{ item.authName }}</span>
+            </template>
+          </el-menu-item>
+        </template>
       </el-menu>
     </el-col>
   </el-row>
@@ -49,21 +47,96 @@
 
 <script setup>
 import GetMenu from '@/api/getMenu/index'
-import {onMounted, ref} from "vue";
-import {Folder} from "@element-plus/icons-vue";
-import * as variables from '@/styles/variables.scss'
+import { onMounted, ref } from 'vue'
+import { Folder } from '@element-plus/icons-vue'
+
 const menuList = ref([])
 
-const initMenuList = async() => {
+const initMenuList = async () => {
   const res = await GetMenu.menu()
-  // console.log(res.data)
   menuList.value = res.data
 }
 initMenuList()
-
-
 </script>
 
 <style lang="scss" scoped>
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 8px;
+  text-align: center;
+  padding-top: 20px;
+  color: #303133;
+}
+
+.subtitle {
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  color: #303133;
+  font-size: 16px;
+}
+
+
+
+
+::v-deep .el-menu {
+  background-color: #F5F7FA;
+  border-right: none;
+
+  .el-menu-item {
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    color: #303133;
+
+    &:hover {
+      background-color: #E4E7ED;
+    }
+
+    &.is-active {
+      background-color: #E6F1FF; // 更浅的蓝色
+      color: #409EFF; // 与背景色形成对比
+    }
+  }
+
+  .el-sub-menu__title {
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    color: #303133;
+  }
+}
+::v-deep .el-menu {
+  background-color: #F5F7FA;
+  border-right: none;
+
+  .el-menu-item {
+    height: 75px; // 增加菜单项高度
+    line-height: 60px;
+    font-size: 16px;
+    color: #303133;
+    padding: 0 20px; // 增加左右 padding
+
+    &:hover {
+      background-color: #E4E7ED;
+    }
+
+    &.is-active {
+      background-color: #E6F1FF;
+      color: #409EFF;
+    }
+  }
+
+  .el-sub-menu__title {
+    height: 60px; // 增加子菜单标题高度
+    line-height: 60px;
+    font-size: 16px;
+    color: #303133;
+    padding: 0 20px; // 增加左右 padding
+  }
+}
 
 </style>

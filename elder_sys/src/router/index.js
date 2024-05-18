@@ -22,28 +22,34 @@ const router = createRouter({
           path: 'baseinfo',
           name: 'baseinfo',
           component: () => import('@/views/main/baseinfo/index.vue'),
+
           children: [
               {
             path: 'adminInfo',
             name: 'adminInfo',
             component: () => import('@/views/main/baseinfo/info/adminInfo/index.vue'),
+                meta: { roles: ['admin'] },
           },
             {
               path: 'elderlyInfo',
               name: 'elderlyInfo',
               component: () => import('@/views/main/baseinfo/info/elderlyInfo/index.vue'),
+              meta: { roles: ['admin'] },
             },{
               path: 'familyInfo',
               name: 'familyInfo',
               component: () => import('@/views/main/baseinfo/info/familyInfo/index.vue'),
+              meta: { roles: ['admin'] },
             },{
               path: 'sellerInfo',
               name: 'sellerInfo',
               component: () => import('@/views/main/baseinfo/info/sellerInfo/index.vue'),
+              meta: { roles: ['admin'] },
             },{
               path: 'plant',
               name: 'plantInfo',
               component: () => import('@/views/main/baseinfo/info/plantInfo/index.vue'),
+              meta: { roles: ['admin'] },
             },
 
 
@@ -58,7 +64,8 @@ const router = createRouter({
         {
           path: 'outstate',
           name: 'outstate',
-          component: () => import('@/views/main/outstate/index.vue')
+          component: () => import('@/views/main/outstate/index.vue'),
+          meta: { roles: ['admin', 'family'] }
         },{
           path: 'dangerpre',
           name: 'dangerpre',
@@ -67,13 +74,15 @@ const router = createRouter({
         {
           path: 'remoteVideo',
           name: 'remoteVideo',
-          component: () => import('@/views/main/remoteVideo/index.vue')
+          component: () => import('@/views/main/remoteVideo/index.vue'),
+          meta: { roles: ['admin', 'family'] }
         },
 
         {
           path: 'trade',
           name: 'trade',
-          component: () => import('@/views/main/trade/index.vue')
+          component: () => import('@/views/main/trade/index.vue'),
+          meta: { roles: ['admin', 'seller'] }
         },
         {
           path: 'analysis',
@@ -83,16 +92,24 @@ const router = createRouter({
             {
               path: 'Eshoppinginfo',
               name: 'Eshoppinginfo',
-              component: () => import('@/views/main/analysis/Eshoppinginfo/index.vue')
+              component: () => import('@/views/main/analysis/Eshoppinginfo/index.vue'),
+              meta: { roles: ['admin', 'family'] }
             },
             {
               path: 'outanalysis',
               name: 'outanalysis',
-              component: () => import('@/views/main/analysis/outanalysis/index.vue')
+              component: () => import('@/views/main/analysis/outanalysis/index.vue'),
+              meta: { roles: ['admin', 'family'] }
             }
           ]
 
         },
+        {
+          //传参示例
+          path: 'error',
+          name:'error',
+          component: ()=>import('../views/system/401.vue')
+        }
       ]
     },
     {
@@ -100,23 +117,6 @@ const router = createRouter({
       name: 'Login',
       component: () => import('../views/system/login.vue')
     },
-    {
-      //传参示例
-      path: '/canshu/:name',
-      name:'test',
-      component: ()=>import('../views/system/test.vue')
-    },
-    // {
-    //   path: '/',
-    //   component: Layout,
-    //   redirect: '/index',
-    //   children: [
-    //     {
-    //       path: '/index',
-    //       component:  import('@/views/main/home/index.vue'),
-    //     }
-    //   ]
-    // }
   ]
 })
 
@@ -126,13 +126,45 @@ router.beforeEach((to, from, next) => {
   console.log(to.path)
   console.log(localStorage.getItem('token'))
   const isLogin = !!localStorage.getItem('token')
-  console.log(isLogin)
+  const role = localStorage.getItem('role');
+  console.log("role", role);
   if (to.path === '/login') {
-    // 如果是访问登录页面，则直接放行
-    next()
+    next();
   } else {
-    // 如果未登录，则跳转到登录页面
-    isLogin ? next() : next('/login')
+    if (!isLogin) {
+      next('/login');
+    } else {
+      if (to.meta.roles && to.meta.roles.length > 0) {
+        if (to.meta.roles.includes(role)) {
+          next(); // 有权限访问
+        } else {
+          next('/error'); // 无权限，跳转到错误页面
+        }
+      } else {
+        next(); // 路由没有定义权限，默认放行
+      }
+    }
   }
+  //console.log(isLogin)
+  // if (to.path === '/login') {
+  //   // 如果是访问登录页面，则直接放行
+  //   if(role){
+  //     next('/login')
+  //   }
+  //   if (to.meta.roles && to.meta.roles.length > 0) {
+  //     if (to.meta.roles.includes(role)) {
+  //       next(); // 有权限访问
+  //     } else {
+  //       next({ path: '/error' }); // 无权限，跳转到错误页面
+  //     }
+  //   } else {
+  //     //next(); // 路由没有定义权限，默认放行
+  //   }
+  // } else {
+  //   // 如果未登录，则跳转到登录页面
+  //   isLogin ? next() : next('/login')
+  // }
+
+
 })
 export default router

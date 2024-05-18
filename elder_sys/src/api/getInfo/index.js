@@ -225,6 +225,17 @@ export const GetTravel = {
     },
 
 };
+export const GetSleepyData = {
+    Info: () => {
+        return axios.get('/api/info/sleepydata', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            timeout: 5000
+        });
+    },
+
+};
 
 export default {
     GetAdmin,
@@ -239,5 +250,6 @@ export default {
     GetBuyData,
     GetAdvise,
     GetEmotion,
-    GetTravel
+    GetTravel,
+    GetSleepyData
 };

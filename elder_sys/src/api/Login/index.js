@@ -5,6 +5,7 @@ const ULogin = {
         const formData = new FormData();
         formData.append('name', form.name);
         formData.append('password', form.password);
+        formData.append('role', form.role);
 
         return axios.post('/api/login', formData, {
             headers: {

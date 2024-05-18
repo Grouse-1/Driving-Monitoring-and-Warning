@@ -2,6 +2,7 @@ import ULogin from "@/api/Login/index.js";
 
 const state = {
     token: null,
+    role: null
 }
 
 const mutations = {
@@ -10,19 +11,24 @@ const mutations = {
     },
     CLEAR_TOKEN(state) {
         state.token = null;
+    },
+    SET_ROLES(state, roles) {
+        state.roles = roles;
     }
 }
 
 const actions = {
-    login({ commit }, { username, password }) {
+    login({ commit }, { username, password, role }) {
         console.log("加载action")
         return new Promise((resolve, reject) => {
-            ULogin.login({ name: username, password })
+            ULogin.login({ name: username, password: password, role: role })
                 .then(response => {
-                    // 登录成功，将 token 存储到 Vuex store 中
+
                     commit('SET_TOKEN', response.data.data.token);
+                    commit('SET_ROLES', role);
                     console.log("记录token返回数据")
                     localStorage.setItem('token', response.data.data.token);
+                    localStorage.setItem('role', role);
                     resolve(response);
                 })
                 .catch(error => {

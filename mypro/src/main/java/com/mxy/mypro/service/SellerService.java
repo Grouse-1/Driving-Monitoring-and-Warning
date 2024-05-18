@@ -7,6 +7,7 @@ import com.mxy.mypro.entity.Admin;
 import com.mxy.mypro.entity.Family;
 import com.mxy.mypro.entity.PaginationResult;
 import com.mxy.mypro.entity.seller;
+import com.mxy.mypro.exception.ServiceException;
 import com.mxy.mypro.mapper.AdminMapper;
 import com.mxy.mypro.mapper.SellerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,22 @@ public class SellerService {
         List<seller> list = sellerList.getRecords();
         long total = sellerList.getTotal();
         return new PaginationResult(list, total,0);
+    }
+
+    public List<seller> login(seller seller1) {
+        QueryWrapper<seller> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name", seller1.getName());
+        List<seller> list =  sellerMapper.selectList(queryWrapper);
+        if(list == null || list.isEmpty()) {
+            throw
+                    new ServiceException("用户名或密码错误");
+        }else {
+            if(list.get(0).getPassword().equals(seller1.getPassword())){
+                return list;
+            }else {
+                throw
+                        new ServiceException("用户名或密码错误");
+            }
+        }
     }
 }

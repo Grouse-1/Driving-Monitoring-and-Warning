@@ -34,10 +34,11 @@
         </div>
         <scatter-chart/>
         <!-- 添加图表或其他元素来展示老人的犯困时间点 -->
-        <div class="card-header">
-          <span class="card-title">老人开心活动地点</span>
+        <div class="card-header" style="margin-bottom: 5px">
+          <span class="card-title">老人较开心活动地点</span>
         </div>
-        a,b,c
+        <el-tag type="info" size="large" effect="light" style="width: 150px;">{{ loveLocation}}</el-tag>
+
         <!-- 添加图表或其他元素来展示老人的开心活动地点 -->
       </el-card>
       <el-card style="margin-top: 10px">
@@ -48,12 +49,12 @@
         </template>
         <div class="advice-container">
           <div class="advice-section">
-            <h3>避开犯困时间点</h3>
+            <h3>出行时间推荐</h3>
             <div>起飞想出发就出发</div>
             <!-- 添加出行建议内容 -->
           </div>
           <div class="advice-section">
-            <h3>多去开心活动场所</h3>
+            <h3>活动场所推荐</h3>
             <div>起飞想去哪去哪</div>
             <!-- 添加出行建议内容 -->
           </div>
@@ -70,6 +71,7 @@ import { GetTravel } from "@/api/getInfo/index.js";
 import ScatterChart from "@/views/main/analysis/outanalysis/chart/scatterChart.vue";
 
 const search = ref('')
+const loveLocation = ref("公园")
 
 const filterTableData = computed(() =>
     tableData.value.filter(
@@ -176,6 +178,7 @@ onMounted(() => {
 .advice-section {
   flex: 1;
   border-radius: 4px;
+  margin-bottom: 4px;
 }
 
 .advice-section h3 {

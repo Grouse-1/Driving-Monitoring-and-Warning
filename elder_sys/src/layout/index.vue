@@ -2,7 +2,9 @@
 import Menu from './Menu/index.vue'
 import store from "@/store/index.js";
 import Header from './headers/index.vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 
 </script>
 
@@ -13,6 +15,7 @@ import Header from './headers/index.vue'
       <el-container class="container">
         <el-header><Header/></el-header>
         <el-main>
+          <el-card  v-if="route.path === '/'">casca</el-card>
           <router-view />
         </el-main>
       </el-container>

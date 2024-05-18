@@ -28,8 +28,14 @@ public class AdminService{
         if(adminList == null || adminList.isEmpty()) {
             throw
         new ServiceException("用户名或密码错误");
+        }else {
+            if(admin_t.getPassword().equals(adminList.get(0).getPassword())) {
+                return adminList;
+            }else {
+                throw
+                        new ServiceException("用户名或密码错误");
+            }
         }
-        return adminList;
     }
     public Integer getIdByName(String name) {
         QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();

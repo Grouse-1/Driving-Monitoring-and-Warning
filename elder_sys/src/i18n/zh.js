@@ -25,6 +25,7 @@ export default {
     analysis: "数据分析与决策",
     schedule:"出行日程记录",
     dangerpre: "危险预警",
+    error: "访问失败",
   },
   login: {
     title: '用户登录',

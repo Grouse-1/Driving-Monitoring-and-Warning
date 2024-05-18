@@ -13,13 +13,13 @@ public class JwtUtils {
 
     private static String secret = "abcdfghiabcdfghiabcdfghiabcdfghi";
 
-    public static String createToken(String username) {
+    public static String createToken(String role) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + 1000*expire);
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setHeaderParam("type","JWT")
-                .setSubject(username)
+                .setSubject(role)
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS512,secret)

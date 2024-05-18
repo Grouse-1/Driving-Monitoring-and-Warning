@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mxy.mypro.entity.Admin;
 import com.mxy.mypro.entity.Family;
 import com.mxy.mypro.entity.PaginationResult;
+import com.mxy.mypro.exception.ServiceException;
 import com.mxy.mypro.mapper.FamilyMapper;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,22 @@ public class FamilyService {
         List<Family> list = famiyList.getRecords();
         long total = famiyList.getTotal();
         return new PaginationResult(list, total,0);
+    }
+
+    public List<Family> login(Family family) {
+        List<Family> list = familyMapper.selectList(family.getName());
+        if(list == null || list.isEmpty()) {
+            throw
+                    new ServiceException("用户名或密码错误");
+        }else {
+            if(list.get(0).getPassword().equals(family.getPassword())){
+                return list;
+            }
+            else  {
+                throw
+                        new ServiceException("用户名或密码错误");
+            }
+        }
+
     }
 }

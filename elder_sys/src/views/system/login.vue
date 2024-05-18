@@ -40,6 +40,25 @@
                  @click="passwordTypeChange"></i>
             </template>
           </el-input>
+
+          <el-form-item>
+            <div class="flex flex-wrap gap-4 items-center">
+              <el-select
+                  v-model="form.Role"
+                  placeholder="选择登录角色"
+                  size="large"
+                  clearable
+                  style="width: 240px"
+              >
+                <el-option
+                    v-for="item in RoleOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+            </div>
+          </el-form-item>
           <el-form-item prop="validCode">
           <el-input
               size="default"
@@ -79,7 +98,6 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import loginLeftPng from '@/assets/login/left.jpg';
 import validCode from '@/components/validCode/Sidentify.vue'
-import ULogin from "@/api/Login/index.js";
 
 export default defineComponent({
   setup() {
@@ -90,17 +108,31 @@ export default defineComponent({
     const form = reactive({
       name: 'admin',
       password: '123456',
-      loading: false
+      loading: false,
+      Role:''
     })
     let sidentifyMode = ref('') //输入框验证码
     let identifyCode = ref('') //图形验证码
     let identifyCodes = ref('1234567890abcdefjhijklinopqrsduvwxyz') //验证码出现的数字和字母
     const passwordType = ref('password')
     let response = null
+    //const Role = ref('')
+    const RoleOptions = [{
+      value: 'admin',
+      label: '管理员',
+    },
+      {
+        value: 'family',
+        label: '家属',
+      },
+      {
+        value: 'seller',
+        label: '商家',
+      }]
     // 方法定义
     const doLogin = async () => {
       try {
-        await store.dispatch('auth/login', { username: form.name, password: form.password }).then(async response => {
+        await store.dispatch('auth/login', { username: form.name, password: form.password, role: form.Role }).then(async response => {
           if (response.data.code === 200) {
             console.log('Login successful:', response.data);
             await router.replace('/');
@@ -223,6 +255,7 @@ export default defineComponent({
       identifyCodes,
       refreshCode,
       response,
+      RoleOptions,
     }
   },
   components: {
@@ -290,14 +323,14 @@ export default defineComponent({
       width: 500px;
 
       h1 {
-        margin-top: 50px;
+        margin-top: 35px;
         text-align: center;
         color: #181818;
       }
 
       .form {
         width: 80%;
-        margin: 40px auto 15px;
+        margin: 30px auto 15px;
 
         .el-input {
           margin-bottom: 20px;

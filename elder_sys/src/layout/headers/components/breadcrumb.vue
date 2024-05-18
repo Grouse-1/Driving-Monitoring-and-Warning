@@ -50,7 +50,7 @@ watch(
   font-weight: 600;
   cursor: pointer;
   &:hover {
-    color: #304156;
+    color: #303133;
   }
 }
 </style>
