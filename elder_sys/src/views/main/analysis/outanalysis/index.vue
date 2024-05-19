@@ -13,7 +13,7 @@
         </template>
         <div class="table-container">
           <div class="search-bar">
-            <el-input v-model="search" size="large" placeholder="Type to search" />
+            <el-input v-model="search" size="large" placeholder="搜索日期或名字" />
           </div>
           <el-table
               :data="filterTableData"
@@ -32,7 +32,7 @@
         <div class="card-header">
           <span class="card-title">老人犯困信息</span>
         </div>
-        <scatter-chart/>
+        <scatter-chart @outAdvice="OutAdvise"/>
         <!-- 添加图表或其他元素来展示老人的犯困时间点 -->
         <div class="card-header" style="margin-bottom: 5px">
           <span class="card-title">老人较开心活动地点</span>
@@ -50,11 +50,13 @@
         <div class="advice-container">
           <div class="advice-section">
             <h3>出行时间推荐</h3>
-            <div>起飞想出发就出发</div>
+            <div>推荐老人在这几个时间点外出活动：{{outTime.join(', ')}}</div>
+<!--            <div>起飞想出发就出发</div>-->
             <!-- 添加出行建议内容 -->
           </div>
           <div class="advice-section">
             <h3>活动场所推荐</h3>
+<!--            <div>{{ outLocation }}</div>-->
             <div>起飞想去哪去哪</div>
             <!-- 添加出行建议内容 -->
           </div>
@@ -67,11 +69,13 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { GetTravel } from "@/api/getInfo/index.js";
+import {GetHappyLocation, GetTravel} from "@/api/getInfo/index.js";
 import ScatterChart from "@/views/main/analysis/outanalysis/chart/scatterChart.vue";
 
 const search = ref('')
-const loveLocation = ref("公园")
+const loveLocation = ref("")
+const outTime = ref([])
+const elderid = ref(1)
 
 const filterTableData = computed(() =>
     tableData.value.filter(
@@ -82,6 +86,10 @@ const filterTableData = computed(() =>
 );
 
 const tableData = ref([])
+
+const OutAdvise = (data) => {
+  outTime.value = data
+}
 
 const initView = () => {
   try {
@@ -101,7 +109,15 @@ const initView = () => {
   }
 }
 
+const getHappyLocation = () => {
+  GetHappyLocation.Info(elderid.value).then(res => {
+    console.log(res.data)
+    loveLocation.value = res.data
+  })
+}
+
 onMounted(() => {
+  getHappyLocation()
   initView()
 })
 </script>

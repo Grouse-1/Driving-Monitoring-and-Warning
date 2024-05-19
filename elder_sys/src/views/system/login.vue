@@ -96,7 +96,8 @@ import {defineComponent, ref, reactive, onMounted} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import loginLeftPng from '@/assets/login/left.jpg';
+//import loginLeftPng from '@/assets/login/left.jpg';
+import loginLeftPng from '@/assets/login/kj.webp';
 import validCode from '@/components/validCode/Sidentify.vue'
 
 export default defineComponent({
@@ -269,7 +270,7 @@ export default defineComponent({
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #fff url('@/assets/login/bg.png') no-repeat center;
+  background: #fff url('@/assets/login/kjpg.png') no-repeat center;
   overflow: hidden;
   background-size: cover;
   cursor: pointer;

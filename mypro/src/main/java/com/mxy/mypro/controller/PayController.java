@@ -36,12 +36,19 @@ public class PayController {
         for (PayInfo payInfo1 : payInfo) {
             summary += payInfo1.getMoney();
         }
-        res1 = payService.addTrans(payInfo.get(0).getElderid(),payInfo.get(0).getShopid(),summary,formattedTime,key);
+        int elderid = payInfo.get(0).getElderid();
+        res1 = payService.addTrans(elderid, payInfo.get(0).getShopid(),summary,formattedTime,key);
         int transid = payService.getTransId(key);
         for(PayInfo payInfo1 : payInfo){
             res2 = payService.addTransDetail(transid, payInfo1.getGoodsname(), payInfo1.getQuantity(), payInfo1.getMoney());
         }
         System.out.println("res1:"+res1+";res2:"+res2);
+        //获取老人余额
+        float money =  payService.getBalance(elderid);
+        float balance = money - summary;
+        //修改老人余额
+        payService.updateElderMoney(balance,elderid);
+
         return new int[]{res1,res2};
     }
 

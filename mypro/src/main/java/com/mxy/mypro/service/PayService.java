@@ -34,4 +34,12 @@ public class PayService {
     public Float gettransMoney(String shopid, String currentDay) {
         return payMapper.gettransMoney(shopid,currentDay);
     }
+
+    public int updateElderMoney(float balance, int elderid) {
+        return payMapper.updateElderMoney(balance, elderid);
+    }
+
+    public float getBalance(int elderid) {
+        return payMapper.getBalance(elderid);
+    }
 }

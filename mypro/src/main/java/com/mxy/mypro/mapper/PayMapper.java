@@ -19,4 +19,10 @@ public interface PayMapper {
 
     @Select("select sum(summary) from transaction where shopid = #{shopid} and tdate like #{currentDay}")
     Float gettransMoney(@Param("shopid")String shopid,  @Param("currentDay")String currentDay);
+
+    @Update("update elderly set balance = #{balance} where id = #{elderid}")
+    int updateElderMoney(@Param("balance")float balance, @Param("elderid")int elderid);
+
+    @Select("select balance from elderly where id = #{elderid}")
+    Float getBalance(@Param("elderid")int elderid);
 }

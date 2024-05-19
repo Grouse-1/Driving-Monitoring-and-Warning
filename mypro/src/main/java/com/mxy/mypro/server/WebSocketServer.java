@@ -76,13 +76,6 @@ public class WebSocketServer {
             broadcast(text1);
         }
     }
-//    private void broadcast(String message) {
-//        sessions.forEach(s -> {
-//            if (s.isOpen()) {
-//                s.getAsyncRemote().sendText(message);
-//            }
-//        });
-//    }
     private void broadcast(String message) {
         sessions.forEach(session -> {
             if (session.isOpen()) {

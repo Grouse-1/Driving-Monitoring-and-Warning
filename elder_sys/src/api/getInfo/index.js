@@ -237,6 +237,20 @@ export const GetSleepyData = {
 
 };
 
+export const GetHappyLocation = {
+    Info: (elderid) => {
+        return axios.get('/api/info/getHappyLocation', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                elderid: elderid,
+            },
+            timeout: 5000
+        });
+    }
+};
+
 export default {
     GetAdmin,
     GetElderly,
@@ -251,5 +265,6 @@ export default {
     GetAdvise,
     GetEmotion,
     GetTravel,
-    GetSleepyData
+    GetSleepyData,
+    GetHappyLocation
 };
