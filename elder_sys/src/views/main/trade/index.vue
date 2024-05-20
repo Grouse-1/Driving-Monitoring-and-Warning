@@ -68,7 +68,10 @@ let myChart = null;
 const transCount = ref('')
 const transMoney = ref('')
 const shopID = ref(3)
-const shopid = ref("3")
+
+if(localStorage.getItem("role")==='seller'){
+  shopID.value = localStorage.getItem("shopid")
+}
 
 
 // const handleCustomEvent = (data) =>{

@@ -5,6 +5,9 @@ import com.mxy.mypro.entity.PaginationResult;
 import com.mxy.mypro.entity.elderly;
 import com.mxy.mypro.service.AdminService;
 import com.mxy.mypro.service.ElderlyService;
+import com.mxy.mypro.utils.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import java.util.Map;
 
 @RestController
 public class EldInfoController {
+    private static final Logger log = LoggerFactory.getLogger(EldInfoController.class);
     private final ElderlyService elderlyService;
     @Autowired
     public EldInfoController(ElderlyService elderlyService) {
@@ -72,5 +76,21 @@ public class EldInfoController {
     @GetMapping("/info/numbers")
     public int GetNum(String location) {
         return elderlyService.getNum(location);
+    }
+    @GetMapping("/info/elderlyID")
+    public int GetID(String token) {
+        String role = JwtUtils.getClaimsByToken(token).getSubject();
+        String family = role.split(":")[0];
+        int id = elderlyService.getID(family);
+        //System.out.println("family123:"+family+",id:"+id);
+        return id;
+    }
+    @GetMapping("/info/elderlyName")
+    public String GetName(Integer elderid) {
+        if(elderid == null || elderid == 0){
+            return null;
+        }else {
+            return elderlyService.getName(elderid);
+        }
     }
 }

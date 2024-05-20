@@ -44,7 +44,31 @@ export const GetElderly = {
             },
             timeout: 5000
         });
-    }
+    },
+    getID(info){
+        return axios.get('/api/info/elderlyID', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                token: info,
+            },
+            timeout: 5000
+        });
+    },
+    getName(info){
+        console.log("info",info);
+        return axios.get('/api/info/elderlyName', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                elderid: info,
+            },
+            timeout: 5000
+        });
+    },
+
 };
 
 
@@ -63,6 +87,17 @@ export const GetSeller = {
         });
     },
 
+    getID(info){
+        return axios.get('/api/info/sellerID', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                token: info,
+            },
+            timeout: 5000
+        });
+    }
 };
 
 
@@ -226,10 +261,13 @@ export const GetTravel = {
 
 };
 export const GetSleepyData = {
-    Info: () => {
+    Info: (info) => {
         return axios.get('/api/info/sleepydata', {
             headers: {
                 'Content-Type': 'application/json'
+            },
+            params:{
+                elderid: info,
             },
             timeout: 5000
         });
@@ -240,6 +278,21 @@ export const GetSleepyData = {
 export const GetHappyLocation = {
     Info: (elderid) => {
         return axios.get('/api/info/getHappyLocation', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                elderid: elderid,
+            },
+            timeout: 5000
+        });
+    }
+};
+
+
+export const GetHappyList = {
+    Info: (elderid) => {
+        return axios.get('/api/info/getHappyList', {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -266,5 +319,6 @@ export default {
     GetEmotion,
     GetTravel,
     GetSleepyData,
-    GetHappyLocation
+    GetHappyLocation,
+    GetHappyList
 };

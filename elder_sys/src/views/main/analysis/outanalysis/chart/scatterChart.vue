@@ -8,12 +8,15 @@ import {GetSleepyData} from "@/api/getInfo/index.js";
 
 const emit = defineEmits(['outAdvice']);
 const recommendedTimes = ref([]);
+const elderid = ref();
 
 onMounted(() => {
   const myChart = echarts.init(document.getElementById('myChart'));
-
+  if(localStorage.getItem("role") === 'family'){
+    elderid.value = localStorage.getItem("elderid")
+  }
   // 获取后端数据
-  GetSleepyData.Info().then((res) => {
+  GetSleepyData.Info(elderid.value).then((res) => {
     console.log(res.data)
     const data = res.data;
     const formattedData = Object.entries(res.data).map(([time, count]) => {

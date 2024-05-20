@@ -107,6 +107,9 @@ const filterTableData = computed(() => {
 const tableData = ref([
 ]);
 const elderid = ref(1)
+if(localStorage.getItem("role")==='family'){
+  elderid.value = localStorage.getItem("elderid")
+}
 const resFood = ref({})
 //标准饮食占比
 const FoodData = [

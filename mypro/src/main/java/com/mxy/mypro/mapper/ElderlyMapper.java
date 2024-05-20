@@ -26,4 +26,10 @@ public interface ElderlyMapper extends BaseMapper<elderly> {
 
     @Select("SELECT COUNT(*) FROM elderly WHERE location_id = (SELECT id FROM location WHERE name = #{location})")
     int getNum(String location);
+
+    @Select("select elderly_id from family where name = #{family} ")
+    Integer getID(String family);
+
+    @Select("select name from elderly where id = #{elderid}")
+    String getName(Integer elderid);
 }

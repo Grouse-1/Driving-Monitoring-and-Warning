@@ -1,6 +1,7 @@
 package com.mxy.mypro.controller;
 
 import com.mxy.mypro.entity.EmotionData;
+import com.mxy.mypro.enums.LocationEnum;
 import com.mxy.mypro.mapper.BuyDataMapper;
 import com.mxy.mypro.mapper.EmotionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +27,53 @@ public class EmotionDataController {
         return emotionMapper.selectList(null);
     }
     @GetMapping("/info/sleepydata")
-    public Map<String, Integer> getSleepyData() {
+    public Map<String, Integer> getSleepyData(Integer elderid) {
         Map<String, Integer> map = new HashMap<>();
         for (int hour = 0; hour < 24; hour++) {
             String timeFilter = String.format("%02d:%%:", hour);
             timeFilter = "%" + timeFilter +  "%";
-            int queryResult = emotionMapper.getCount(timeFilter);
+            int queryResult = emotionMapper.getCount(timeFilter, elderid);
             map.put(String.format("%02d:00", hour), queryResult);
         }
         return map;
     }
     @GetMapping("/info/getHappyLocation")
     public String getHappyLocation(String elderid) {
-        System.out.println("elderid123:" + elderid);
-        //查数据库 happy数据 排名最高的地点id 再查地点名字  返回地点字符串
-        return "菜市场";
+        Integer market = emotionMapper.getHappyMCount(elderid);
+        Integer park = emotionMapper.getHappyPCount(elderid);
+        if(market == null){
+            System.out.println("无数据置0");
+            market = 0;
+        }
+        if(park == null){
+            System.out.println("无数据置0");
+            park = 0;
+        }
+        if(market > park){
+            return LocationEnum.MARKET.getName();
+        }else if(market < park){
+            return LocationEnum.PARK.getName();
+        }else {
+            return "";
+        }
     }
 
+    @GetMapping("/info/getHappyList")
+    public Map<String, Integer> getHappyList(String elderid) {
+        Integer count1 = emotionMapper.getHappyMCount(elderid);
+        Integer count2 = emotionMapper.getHappyPCount(elderid);
+        System.out.println("count1:" + count1+",count2:" + count2);
+        if(count1 == null){
+            System.out.println("无数据置0");
+            count1 = 0;
+        }
+        if(count2 == null){
+            System.out.println("无数据置0");
+            count2 = 0;
+        }
+        Map<String, Integer> map = new HashMap<>();
+        map.put("market", count1);
+        map.put("park", count2);
+        return map;
+    }
 }

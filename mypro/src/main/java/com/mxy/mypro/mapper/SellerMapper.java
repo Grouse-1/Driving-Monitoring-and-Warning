@@ -17,4 +17,7 @@ public interface SellerMapper extends BaseMapper<seller> {
 
     @Select("SELECT * FROM seller WHERE name = #{name}")
     IPage<seller> selectByName(Page<Object> objectPage,@Param("name")String name);
+
+    @Select("select id from seller where name = #{seller}")
+    int getID(String seller);
 }

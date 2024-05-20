@@ -5,6 +5,7 @@ import com.mxy.mypro.entity.PaginationResult;
 import com.mxy.mypro.entity.seller;
 import com.mxy.mypro.service.AdminService;
 import com.mxy.mypro.service.SellerService;
+import com.mxy.mypro.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,5 +61,14 @@ public class SellerInfoController {
         //System.out.println("del:"+(Integer) id.get("id"));
         //return  0;
         return sellerService.deleteseller((Integer)id.get("id"));
+    }
+
+    @GetMapping("/info/sellerID")
+    public int GetID(String token) {
+        String role = JwtUtils.getClaimsByToken(token).getSubject();
+        String seller = role.split(":")[0];
+        int id = sellerService.getID(seller);
+        //System.out.println("family123:"+family+",id:"+id);
+        return id;
     }
 }

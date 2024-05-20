@@ -69,4 +69,8 @@ public class SellerService {
             }
         }
     }
+
+    public int getID(String seller) {
+        return sellerMapper.getID(seller);
+    }
 }

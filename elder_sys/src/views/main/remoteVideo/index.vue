@@ -20,8 +20,14 @@
           <pie-chart />
         </el-card>
         <el-card style="width: 100%; margin-bottom: 5px"  shadow="hover">
-          <el-input v-model="Ename" clearable style="width: 80%;" placeholder="请输入老人姓名" />
-          <el-button :icon="Search" @click="initElderly" style="margin-left: 5px; background-color: gray; width: 10%" />
+          <div v-if=" key === 'admin'">
+            <el-input v-model="Ename" clearable style="width: 80%;" placeholder="请输入老人姓名" />
+            <el-button :icon="Search" @click="initElderly" style="margin-left: 5px; background-color: gray; width: 10%" />
+          </div>
+          <div v-else>
+            <el-input clearable style="width: 80%;" placeholder="非管理员无权搜索" />
+            <el-button :icon="Search" style="margin-left: 5px; background-color: gray; width: 10%" />
+          </div>
         </el-card>
         <el-card style="width: 100%; height: 125px"  shadow="hover">
         <el-descriptions
@@ -167,7 +173,15 @@ const initElderly = async() => {
     //console.log(elderlyList.value)
   }
 }
-onMounted(() => {
+onMounted(async () => {
+  if (localStorage.getItem('role') === 'family') {
+
+    await GetElderly.getName(localStorage.getItem('elderid')).then((res1) => {
+      Ename.value = res1.data
+      initElderly()
+    })
+
+  }
   connectWebSocket();
 });
 

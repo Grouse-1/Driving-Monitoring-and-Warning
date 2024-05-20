@@ -60,4 +60,12 @@ public class ElderlyService {
     public int getNum(String location) {
         return elderlymapper.getNum(location);
     }
+
+    public Integer getID(String family) {
+        return elderlymapper.getID(family);
+    }
+
+    public String getName(Integer elderid) {
+        return elderlymapper.getName(elderid);
+    }
 }

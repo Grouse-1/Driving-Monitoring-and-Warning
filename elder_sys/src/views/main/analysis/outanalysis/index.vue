@@ -37,32 +37,35 @@
         <div class="card-header" style="margin-bottom: 5px">
           <span class="card-title">老人较开心活动地点</span>
         </div>
-        <el-tag type="info" size="large" effect="light" style="width: 150px;">{{ loveLocation}}</el-tag>
-
+        <bar-chart :elderid="elderid"/>
         <!-- 添加图表或其他元素来展示老人的开心活动地点 -->
       </el-card>
-      <el-card style="margin-top: 10px">
-        <template #header>
-          <div class="card-header">
-            <span class="card-title">出行建议</span>
-          </div>
-        </template>
-        <div class="advice-container">
-          <div class="advice-section">
-            <h3>出行时间推荐</h3>
-            <div>推荐老人在这几个时间点外出活动：{{outTime.join(', ')}}</div>
-<!--            <div>起飞想出发就出发</div>-->
-            <!-- 添加出行建议内容 -->
-          </div>
-          <div class="advice-section">
-            <h3>活动场所推荐</h3>
-<!--            <div>{{ outLocation }}</div>-->
-            <div>起飞想去哪去哪</div>
-            <!-- 添加出行建议内容 -->
-          </div>
-        </div>
-      </el-card>
     </el-col>
+  </el-row>
+  <el-row>
+    <el-card class="travel-advice-card">
+      <template #header>
+        <div class="card-header">
+          <span class="card-title">出行建议</span>
+        </div>
+      </template>
+      <div class="advice-container">
+        <el-row gutter="20">
+          <el-col :span="16">
+            <div class="advice-section" style="margin-left: 45%; margin-right: 300px">
+              <h3 class="section-title">出行时间推荐</h3>
+              <div class="section-content" style="width: 100%;">推荐老人在这几个时间点外出活动：{{ outTime.join(', ') }}</div>
+            </div>
+          </el-col>
+          <el-col :span="4">
+            <div class="advice-section" style="height: 100%">
+              <h3 class="section-title">活动场所推荐</h3>
+              <el-tag type="info" size="large" effect="light" class="location-tag" style="width: 100%; text-align: center">{{ loveLocation }}</el-tag>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </el-card>
   </el-row>
 </template>
 
@@ -71,11 +74,15 @@
 import { computed, onMounted, ref } from 'vue'
 import {GetHappyLocation, GetTravel} from "@/api/getInfo/index.js";
 import ScatterChart from "@/views/main/analysis/outanalysis/chart/scatterChart.vue";
+import BarChart from "@/views/main/analysis/outanalysis/chart/barChart.vue";
 
 const search = ref('')
 const loveLocation = ref("")
 const outTime = ref([])
 const elderid = ref(1)
+if(localStorage.getItem("role")==='family'){
+  elderid.value = localStorage.getItem("elderid")
+}
 
 const filterTableData = computed(() =>
     tableData.value.filter(
@@ -155,6 +162,7 @@ onMounted(() => {
   align-items: flex-start;
   justify-content: center;
   height: 100%;
+  padding: 10px;
 }
 
 .advice-title {
@@ -172,10 +180,6 @@ onMounted(() => {
   color: #666;
 }
 
-.card-title {
-  font-size: 18px;
-  font-weight: bold;
-}
 
 .table-container {
   height: 515px;
@@ -186,19 +190,52 @@ onMounted(() => {
   margin-bottom: 16px;
 }
 
-.advice-container {
-  display: flex;
-  justify-content: space-between;
-}
 
 .advice-section {
   flex: 1;
   border-radius: 4px;
   margin-bottom: 4px;
+  padding: 10px;
+  background-color: #f9fafc;
+  width: 300px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .advice-section h3 {
-  font-size: 16px;
-  font-weight: bold;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.travel-advice-card {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+//.section-title {
+//  font-size: 16px;
+//  font-weight: 500;
+//  margin-bottom: 10px;
+//}
+
+.section-content {
+  font-size: 14px;
+  color: #666;
+}
+
+.location-tag {
+  display: block;
+  width: fit-content;
+  margin-top: 10px;
+  font-size: 14px;
+  padding: 10px 15px;
+  background-color: #e0f7fa;
+  color: #00796b;
+  border-radius: 4px;
 }
 </style>

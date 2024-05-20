@@ -8,8 +8,14 @@
 
     <el-col :span="8">
       <el-card style="width: 100%; margin-bottom: 20px">
+        <div v-if=" key === 'admin'">
         <el-input v-model="Ename" clearable style="width: 240px;" placeholder="请输入老人姓名" />
         <el-button :icon="Search" @click="initElderly" style="margin-left: 2px; background-color: gray" />
+        </div>
+        <div v-else>
+          <el-input clearable style="width: 240px;" placeholder="非管理员无权搜索" />
+          <el-button :icon="Search" style="margin-left: 2px; background-color: gray" />
+        </div>
       </el-card>
 <!--      <el-tag type="primary">Tag 1</el-tag>-->
 <!--      <el-tag type="success">Tag 2</el-tag>-->
@@ -153,7 +159,7 @@
 
 <script setup>
 import {Grid, Money, Search, UserFilled} from '@element-plus/icons-vue'
-import {computed, onMounted, ref} from 'vue'
+import {computed, onBeforeMount, onMounted, ref} from 'vue'
 import LineChart from "@/views/main/outstate/components/state/lineCharts.vue";
 import MarketLine from "@/views/main/outstate/components/state/marketLine.vue";
 import ParkLine from "@/views/main/outstate/components/state/parkLine.vue";
@@ -163,6 +169,8 @@ const currentDate = ref('');
 const size = 'default'
 const direction = ref('horizontal');
 const column = ref(1)
+const key = ref('')
+key.value = localStorage.getItem('role')
 const tableData = [
   {
     date: '1',
@@ -216,6 +224,7 @@ const form = ref({
 
 
 
+
 const updateCurrentDate=()=>{
   const now = new Date();
   const year = now.getFullYear();
@@ -245,6 +254,7 @@ const initElderly = async() => {
   //   form.value = null
   //   return null
   // }
+  console.log("Ename",Ename.value)
   const res = await GetElderly.Info(Ename)
   const updatedElderlyList = res.data.map(item => {
     return {
@@ -264,11 +274,25 @@ const initElderly = async() => {
   }
 }
 
-onMounted(() => {
+onBeforeMount(()=>{
+
+})
+
+onMounted(async () => {
+  if (localStorage.getItem('role') === 'family') {
+
+    await GetElderly.getName(localStorage.getItem('elderid')).then((res1) => {
+      Ename.value = res1.data
+      initElderly()
+    })
+
+  }
   updateCurrentDate();
   setInterval(updateCurrentDate, 1000); // 每秒更新一次时间
 });
-initElderly()
+
+
+
 </script>
 
 <style lang="scss" scoped>

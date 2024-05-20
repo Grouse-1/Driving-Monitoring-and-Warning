@@ -14,6 +14,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
+import router from "@/router/index.js";
 const store = useStore()
 
 const squareUrl = ref(
@@ -21,7 +22,8 @@ const squareUrl = ref(
 )
 
 const logout = () => {
-  store.dispatch('app/logout')
+  store.dispatch('auth/logout')
+  router.push('/login')
 }
 </script>
 
