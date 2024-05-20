@@ -3,12 +3,22 @@
 </template>
 <script setup>
 import echarts from "@/utils/echarts.js";
-import {onMounted, ref} from 'vue';
-import {GetSleepyData} from "@/api/getInfo/index.js";
+import {onMounted, ref, watch} from 'vue';
+import {GetHappyList, GetSleepyData} from "@/api/getInfo/index.js";
 
 const emit = defineEmits(['outAdvice']);
 const recommendedTimes = ref([]);
 const elderid = ref();
+const props = defineProps({
+  elderid: {
+    type: String,
+    required: true
+  }
+})
+watch(()=>props.elderid, async (newDate) => {
+    elderid.value = props.elderid;
+    //再次生成图表
+},{ immediate: true, deep: true})
 
 onMounted(() => {
   const myChart = echarts.init(document.getElementById('myChart'));

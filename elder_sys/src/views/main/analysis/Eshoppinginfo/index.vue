@@ -13,6 +13,15 @@
       <template #header>
         <div class="card-header">
           <span class="card-title">老人买菜购买记录</span>
+          <el-button
+              size="default"
+              @click="adminSearch"
+              style="margin-left: auto"
+              type="success"
+              v-if="key === 'admin'"
+          >
+            搜索用户
+          </el-button>
         </div>
       </template>
       <div class="table-container">
@@ -34,6 +43,18 @@
         </el-table>
       </div>
     </el-card>
+    <el-dialog v-model="adminS" title="搜索用户" width="500">
+      <el-input v-model="inputName"></el-input>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="giveElderID">
+            确认
+          </el-button>
+          <el-button @click="adminS = false; inputName = ''">取消</el-button>
+
+        </div>
+      </template>
+    </el-dialog>
   </el-col>
   <el-col :span="12" >
     <el-card style="display: flex;">
@@ -56,18 +77,26 @@
             <div v-if="lowPercentageCategories.length > 0" class="advice-container">
               <div style="height: 90px">
                 <div class="advice-title">营养建议:</div>
-                <div class="advice-content">
+                <div class="advice-content" v-if="content === true">
                   <p>建议适当增加食物类别的摄取比例:</p>
                   <div class="category-list">{{ lowPercentageCategories.join('、') }}</div>
+                </div>
+                <div v-else>
+                  没有数据，暂无推荐
                 </div>
               </div>
               <div style="height: 50%">
                 <div class="advice-title">参考推荐:</div>
-                    <div v-for="(value, key) in resFood" :key="key" style="display: flex">
-                      <div>{{ key }}：</div>
-                      <div style="display: flex"><div v-for="item in value" :key="item" style="color: #666;">{{ item }}、</div></div>
+                <div v-if="content === true">
+                  <div v-for="(value, key) in resFood" :key="key" style="display: flex">
+                    <div>{{ key }}：</div>
+                    <div style="display: flex"><div v-for="item in value" :key="item" style="color: #666;">{{ item }}、</div></div>
 
-                    </div>
+                  </div>
+                </div>
+                <div v-else>
+                  没有数据，暂无推荐
+                </div>
               </div>
             </div>
           </el-card>
@@ -84,13 +113,24 @@
 
 <script setup>
 import {computed, onMounted, ref, watch} from 'vue'
-import {GetAdvise, GetBuyData} from "@/api/getInfo/index.js";
+import {GetAdvise, GetBuyData, GetElderly} from "@/api/getInfo/index.js";
 import echarts from "@/utils/echarts.js";
 import FoodTypeChart from "@/views/main/analysis/Eshoppinginfo/chart/FoodTypeChart.vue";
+import {ElMessage} from "element-plus";
 
 const search = ref('')
 const loading = ref(true)
 const advice = ref('')
+const adminS = ref(false)
+const key = ref('')
+const inputName = ref('')
+const content = ref(true)
+key.value = localStorage.getItem("role")
+const adminSearch = () =>{
+  adminS.value = true
+}
+
+
 //搜索框过滤
 const filterTableData = computed(() => {
   if (tableData.value.length > 0) {
@@ -106,10 +146,35 @@ const filterTableData = computed(() => {
 
 const tableData = ref([
 ]);
+
+
 const elderid = ref(1)
 if(localStorage.getItem("role")==='family'){
   elderid.value = localStorage.getItem("elderid")
 }
+const giveElderID = async () => {
+  try {
+    const res1 = await GetElderly.Info(inputName);
+    const data1 = res1.data.shift();
+
+    if (data1 !== null) {
+      elderid.value = data1.id;
+      initView();
+    }
+  } catch (error) {
+    ElMessage.error({
+      message: '没有该用户',
+      type: 'error',
+      duration: 1000
+    });
+    return; // 直接退出函数，不执行后续代码
+  }
+
+  adminS.value = false
+  inputName.value = ''
+}
+
+
 const resFood = ref({})
 //标准饮食占比
 const FoodData = [
@@ -174,11 +239,17 @@ const handleDataUpdate = (data) => {
 //返回子组件(老人近期饮食)种类和占比数据
 const percentageData = ref([]);
 const handlePercentageDataUpdate = (updatedPercentageData) => {
-  percentageData.value = updatedPercentageData;
-  //console.log("percentageData:", percentageData.value[0]);
-  loading.value = false
-  advice.value = percentageData.value;
-  handleDataUpdate(advice.value);
+  if (updatedPercentageData.length === undefined) {
+      content.value = false
+  }else{
+    content.value = true
+    console.log("已经设置")
+    percentageData.value = updatedPercentageData;
+    //console.log("percentageData:", percentageData.value[0]);
+    loading.value = false
+    advice.value = percentageData.value;
+    handleDataUpdate(advice.value);
+  }
 };
 const chartData = FoodData.map(item => ({
   name: item.name,

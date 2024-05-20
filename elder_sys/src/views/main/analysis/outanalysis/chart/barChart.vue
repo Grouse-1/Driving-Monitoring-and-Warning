@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, watch} from 'vue';
 import echarts from '@/utils/echarts.js';
 import {GetHappyList} from "@/api/getInfo/index.js";
 
@@ -14,6 +14,10 @@ const props = defineProps({
   }
 })
 
+watch(()=>props.elderid, async (newDate) => {
+  const data = await GetHappyList.Info(props.elderid);
+  initChart(data.data);
+},{ immediate: true, deep: true})
 // 模拟从后端获取数据
 const fetchData = async () => {
   // 这里你可以替换成实际的 API 调用

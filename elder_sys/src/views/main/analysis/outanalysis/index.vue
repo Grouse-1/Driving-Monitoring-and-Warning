@@ -9,6 +9,15 @@
         <template #header>
           <div class="card-header">
             <span class="card-title">老人出行记录</span>
+            <el-button
+                size="default"
+                @click="adminSearch"
+                style="margin-left: auto"
+                type="success"
+                v-if="key === 'family'"
+            >
+              搜索用户
+            </el-button>
           </div>
         </template>
         <div class="table-container">
@@ -26,13 +35,25 @@
           </el-table>
         </div>
       </el-card>
+      <el-dialog v-model="adminS" title="搜索用户" width="500">
+        <el-input v-model="inputName"></el-input>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button type="primary" @click="giveElderID">
+              确认
+            </el-button>
+            <el-button @click="adminS = false; inputName = ''">取消</el-button>
+
+          </div>
+        </template>
+      </el-dialog>
     </el-col>
     <el-col :span="12">
       <el-card>
         <div class="card-header">
           <span class="card-title">老人犯困信息</span>
         </div>
-        <scatter-chart @outAdvice="OutAdvise"/>
+        <scatter-chart @outAdvice="OutAdvise" :elderid="elderid"/>
         <!-- 添加图表或其他元素来展示老人的犯困时间点 -->
         <div class="card-header" style="margin-bottom: 5px">
           <span class="card-title">老人较开心活动地点</span>
@@ -72,9 +93,13 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import {GetHappyLocation, GetTravel} from "@/api/getInfo/index.js";
+import {GetElderly, GetHappyLocation, GetTravel} from "@/api/getInfo/index.js";
 import ScatterChart from "@/views/main/analysis/outanalysis/chart/scatterChart.vue";
 import BarChart from "@/views/main/analysis/outanalysis/chart/barChart.vue";
+import {ElMessage} from "element-plus";
+
+
+
 
 const search = ref('')
 const loveLocation = ref("")
@@ -83,6 +108,36 @@ const elderid = ref(1)
 if(localStorage.getItem("role")==='family'){
   elderid.value = localStorage.getItem("elderid")
 }
+const adminS = ref(false)
+const key = ref('')
+const inputName = ref('')
+const content = ref(true)
+key.value = localStorage.getItem("role")
+const adminSearch = () =>{
+  adminS.value = true
+}
+const giveElderID = async () => {
+  try {
+    const res1 = await GetElderly.Info(inputName);
+    const data1 = res1.data.shift();
+
+    if (data1 !== null) {
+      elderid.value = data1.id;
+      initView();
+    }
+  } catch (error) {
+    ElMessage.error({
+      message: '没有该用户',
+      type: 'error',
+      duration: 1000
+    });
+    return; // 直接退出函数，不执行后续代码
+  }
+
+  adminS.value = false
+  inputName.value = ''
+}
+
 
 const filterTableData = computed(() =>
     tableData.value.filter(

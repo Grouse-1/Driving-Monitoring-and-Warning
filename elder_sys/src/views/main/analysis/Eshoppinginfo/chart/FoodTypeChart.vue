@@ -1,10 +1,11 @@
 <template>
-  <div id="pie-chart" style="width: 300px; height: 300px"></div>
+  <div id="pie-chart" style="width: 300px; height: 300px" ></div>
 </template>
 
 <script setup>
 import {onMounted, ref, watch} from 'vue';
 import echarts from "@/utils/echarts.js";
+const key = ref(false)
 
 const props = defineProps({
   tableData: {
@@ -19,10 +20,20 @@ watch(
     () => props.tableData,
     (newData) => {
       if (newData.length > 0) {
+        console.log(props.tableData)
         initPieChart();
+      }else if(newData.length === 0){
+        const chartDom = document.getElementById('pie-chart');
+        try {
+          echarts.dispose(chartDom);
+          const data1 = ref([])
+          emit('update-percentage-data', data1);
+          key.value = true
+        }catch (error){
+        }
       }
     },
-    { immediate: true }
+    { immediate: true , deep: true }
 );
 
 function initPieChart() {
@@ -82,8 +93,10 @@ function initPieChart() {
       percent: (item.value / totalValue) * 100,
     }));
 
-    if (!isEqual(lastPercentageData.value, updatedPercentageData)) {
+    if ((!isEqual(lastPercentageData.value, updatedPercentageData)) || key.value === true) {
+      key.value = false
       lastPercentageData.value = updatedPercentageData;
+      //console.log(1111111111)
       emit('update-percentage-data', updatedPercentageData);
     }
   });
