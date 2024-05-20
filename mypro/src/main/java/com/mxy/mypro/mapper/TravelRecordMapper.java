@@ -17,6 +17,8 @@ public interface TravelRecordMapper extends BaseMapper<TravelRecord> {
             + "t.Tdate "
             + "FROM travel t "
             + "JOIN elderly e ON t.elderid = e.id "
-            + "JOIN location l ON t.locationid = l.id")
-    List<TravelRecord> getTravelRecord();
+            + "JOIN location l ON t.locationid = l.id "
+            + "WHERE t.elderid = #{elderid}"
+    )
+    List<TravelRecord> getTravelRecord(Integer elderid);
 }

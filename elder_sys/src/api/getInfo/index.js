@@ -250,10 +250,13 @@ export const GetEmotion = {
 };
 
 export const GetTravel = {
-    Info: () => {
+    Info: (elderid) => {
         return axios.get('/api/info/travel', {
             headers: {
                 'Content-Type': 'application/json'
+            },
+            params:{
+                elderid: elderid,
             },
             timeout: 5000
         });

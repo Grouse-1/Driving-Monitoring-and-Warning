@@ -1,6 +1,7 @@
 <template>
   <div id="myChart" style="width: 100%; height: 250px;"></div>
 </template>
+
 <script setup>
 import echarts from "@/utils/echarts.js";
 import {onMounted, ref, watch} from 'vue';
@@ -14,20 +15,24 @@ const props = defineProps({
     type: String,
     required: true
   }
-})
-watch(()=>props.elderid, async (newDate) => {
-    elderid.value = props.elderid;
-    //再次生成图表
-},{ immediate: true, deep: true})
+});
 
-onMounted(() => {
+// 监听 elderid 的变化
+watch(() => props.elderid, async (newDate) => {
+  elderid.value = props.elderid;
+  await initializeChart();
+}, {immediate: true, deep: true});
+
+// 提取图表初始化和数据加载逻辑到一个独立的函数中
+const initializeChart = async () => {
   const myChart = echarts.init(document.getElementById('myChart'));
-  if(localStorage.getItem("role") === 'family'){
-    elderid.value = localStorage.getItem("elderid")
+  if (localStorage.getItem("role") === 'family') {
+    elderid.value = localStorage.getItem("elderid");
   }
-  // 获取后端数据
-  GetSleepyData.Info(elderid.value).then((res) => {
-    console.log(res.data)
+
+  try {
+    const res = await GetSleepyData.Info(elderid.value);
+    console.log(res.data);
     const data = res.data;
     const formattedData = Object.entries(res.data).map(([time, count]) => {
       return [formatTimeData(time), count];
@@ -48,9 +53,7 @@ onMounted(() => {
         type: 'value',
         min: 0,
         max: 24,
-        // 设置 x 轴主刻度间隔为 3 小时
         interval: 3,
-        // 自定义 x 轴刻度标签的格式化函数
         axisLabel: {
           formatter: (value) => {
             const hours = Math.floor(value);
@@ -73,45 +76,14 @@ onMounted(() => {
 
     myChart.setOption(option);
     recommendTimes(data);
-  });
+  } catch (error) {
+    console.error(error);
+    // 处理错误逻辑
+  }
+};
 
-  // const data = '这是子组件的数据';
-  // emit('outAdvice', data);
-});
-// function recommendTimes(data) {
-//   const timeDataPairs = Object.entries(data).map(([time, count]) => ({
-//     time,
-//     count
-//   }));
-//
-//   // 按犯困次数排序，找出最少的三个点
-//   timeDataPairs.sort((a, b) => a.count - b.count);
-//   const minThreePoints = timeDataPairs.slice(0, 3);
-//
-//   // 过滤掉犯困次数超过3次的点
-//   recommendedTimes.value = minThreePoints
-//       .filter(point => point.count <= 3)
-//       .map(point => point.time);
-// }
-// function fetchData() {
-//   return new Promise((resolve) => {
-//     // 模拟后端数据
-//     const data = [
-//       ['9:32', 3],
-//       ['12:00', 2],
-//       ['18:00', 5],
-//       // 添加更多数据点
-//     ];
-//     resolve(data);
-//   });
-// }
-
-
-// function formatTimeData(timeStr) {
-//   const [hours, minutes] = timeStr.split(':').map(Number);
-//   return hours + minutes / 60;
-// }
-
+// 调用 initializeChart 函数
+onMounted(initializeChart);
 
 function formatTimeData(timeStr) {
   const [hours, minutes] = timeStr.split(':').map(Number);
@@ -140,9 +112,7 @@ function recommendTimes(data) {
       .map(point => point.time);
   emit('outAdvice', recommendedTimes.value);
 }
-
 </script>
-
 
 <style scoped lang="scss">
 </style>

@@ -148,7 +148,7 @@ const tableData = ref([
 ]);
 
 
-const elderid = ref(1)
+const elderid = ref()
 if(localStorage.getItem("role")==='family'){
   elderid.value = localStorage.getItem("elderid")
 }

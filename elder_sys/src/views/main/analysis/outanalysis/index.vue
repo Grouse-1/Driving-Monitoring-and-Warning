@@ -14,7 +14,7 @@
                 @click="adminSearch"
                 style="margin-left: auto"
                 type="success"
-                v-if="key === 'family'"
+                v-if="key === 'admin'"
             >
               搜索用户
             </el-button>
@@ -92,7 +92,7 @@
 
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {GetElderly, GetHappyLocation, GetTravel} from "@/api/getInfo/index.js";
 import ScatterChart from "@/views/main/analysis/outanalysis/chart/scatterChart.vue";
 import BarChart from "@/views/main/analysis/outanalysis/chart/barChart.vue";
@@ -104,7 +104,7 @@ import {ElMessage} from "element-plus";
 const search = ref('')
 const loveLocation = ref("")
 const outTime = ref([])
-const elderid = ref(1)
+const elderid = ref()
 if(localStorage.getItem("role")==='family'){
   elderid.value = localStorage.getItem("elderid")
 }
@@ -156,7 +156,7 @@ const OutAdvise = (data) => {
 const initView = () => {
   try {
     // 调用 API 获取数据
-    GetTravel.Info().then(res => {
+    GetTravel.Info(elderid.value).then(res => {
       const data = res.data
       console.log(data)
       // 将服务器返回的数据映射到 tableData 数组中
@@ -177,6 +177,10 @@ const getHappyLocation = () => {
     loveLocation.value = res.data
   })
 }
+
+watch(() => elderid, async (newDate) => {
+  getHappyLocation()
+}, {immediate: true, deep: true});
 
 onMounted(() => {
   getHappyLocation()

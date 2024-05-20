@@ -21,7 +21,7 @@ public class TravelRecordController {
 
 
     @GetMapping("/info/travel")
-    public List<TravelRecord> getTravelRecord() {
-        return travelRecordMapper.getTravelRecord();
+    public List<TravelRecord> getTravelRecord(Integer elderid) {
+        return travelRecordMapper.getTravelRecord(elderid);
     }
 }
