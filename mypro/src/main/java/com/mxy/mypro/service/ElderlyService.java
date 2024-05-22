@@ -68,4 +68,8 @@ public class ElderlyService {
     public String getName(Integer elderid) {
         return elderlymapper.getName(elderid);
     }
+
+    public List<elderly>  getByRFID(String rfid) {
+            return elderlymapper.getByRFID(rfid);
+    }
 }

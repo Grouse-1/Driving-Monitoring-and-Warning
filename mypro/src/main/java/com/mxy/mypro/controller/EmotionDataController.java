@@ -1,6 +1,7 @@
 package com.mxy.mypro.controller;
 
 import com.mxy.mypro.entity.EmotionData;
+import com.mxy.mypro.entity.emotionPieChart;
 import com.mxy.mypro.enums.LocationEnum;
 import com.mxy.mypro.mapper.BuyDataMapper;
 import com.mxy.mypro.mapper.EmotionMapper;
@@ -23,8 +24,10 @@ public class EmotionDataController {
     }
 
     @GetMapping("/info/emotion")
-    public List<EmotionData> getEmotionData() {
-        return emotionMapper.selectList(null);
+    public List<emotionPieChart> getEmotionData(Integer elderid) {
+        return emotionMapper.selectEmotion(elderid);
+        //System.out.println(emotionMapper.selectEmotion(elderid));
+        //return null;
     }
     @GetMapping("/info/sleepydata")
     public Map<String, Integer> getSleepyData(Integer elderid) {

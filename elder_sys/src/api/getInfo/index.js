@@ -68,7 +68,17 @@ export const GetElderly = {
             timeout: 5000
         });
     },
-
+    getInfoByRFID(rfid){
+        return axios.get('/api/info/elderlyRFID', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params:{
+                rfid: rfid,
+            },
+            timeout: 5000
+        });
+    }
 };
 
 
@@ -238,10 +248,13 @@ export const GetAdvise = {
 
 
 export const GetEmotion = {
-    Info: () => {
+    Info: (elderid) => {
         return axios.get('/api/info/emotion', {
             headers: {
                 'Content-Type': 'application/json'
+            },
+            params:{
+                elderid: elderid,
             },
             timeout: 5000
         });

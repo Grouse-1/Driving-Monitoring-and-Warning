@@ -15,7 +15,7 @@ const route = useRoute()
       <el-container class="container">
         <el-header><Header/></el-header>
         <el-main>
-          <el-card  v-if="route.path === '/'">casca</el-card>
+<!--          <el-card  v-if="route.path === '/'">casca</el-card>-->
           <router-view />
         </el-main>
       </el-container>

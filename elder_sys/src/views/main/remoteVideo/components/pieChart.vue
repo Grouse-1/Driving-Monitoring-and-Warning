@@ -8,6 +8,10 @@ import echarts from '@/utils/echarts.js';
 import {GetEmotion} from "@/api/getInfo/index.js";
 
 const dialog = ref(null);
+const elderid = ref();
+if(localStorage.getItem("role")==='family'){
+  elderid.value = localStorage.getItem("elderid")
+}
 const option = ref({
   title: {
     text: '最近心情',
@@ -57,7 +61,7 @@ onUnmounted(() => {
 async function updateChartData() {
   try {
     // 请求后端表情百分比数据
-    const res = await GetEmotion.Info()
+    const res = await GetEmotion.Info(elderid.value)
     const data = res.data
     console.log(data)
 

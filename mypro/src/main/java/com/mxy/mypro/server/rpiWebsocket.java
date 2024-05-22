@@ -65,10 +65,14 @@ public class rpiWebsocket {
     public void onMsg(String text, Session session) throws IOException {
         LocalDateTime now = LocalDateTime.now();
         String formattedTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println(text);
+        if(text.equals(":")){
+            return;
+        }
         String text1 = text.split(":")[0];
         int count = Integer.parseInt(text.split(":")[1]);
         EmotionData emotionData = new EmotionData(emotionMapper.GetElderLocation(), text1, formattedTime,1,count);
-        //emotionMapper.insert(emotionData);
+        emotionMapper.insert(emotionData);
         System.out.println("client 发送：" + text);
         //System.out.println(session);
         //broadcast(text);

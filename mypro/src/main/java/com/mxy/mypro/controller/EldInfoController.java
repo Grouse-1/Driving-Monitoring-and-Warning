@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class EldInfoController {
 
     @PostMapping("/info/editelderly")
     public int EditElderly(@RequestBody elderly eld) {
-        System.out.println(eld.toString());
+        System.out.println("eldid1111:"+eld.getLocationId());
         return elderlyService.editadmin(eld);
     }
 
@@ -91,6 +92,22 @@ public class EldInfoController {
             return null;
         }else {
             return elderlyService.getName(elderid);
+        }
+    }
+    @GetMapping("/info/elderlyRFID")
+    public Map<Integer, String> GetRFID(String rfid) {
+        rfid = rfid.replace(" ", "");
+        //System.out.println("rfid111:"+rfid);
+
+        if(rfid == null|| rfid.equals("")){
+            return null;
+        }else {
+            List<elderly> list =  elderlyService.getByRFID(rfid);
+            Integer id = list.get(0).getId();
+            String name = list.get(0).getName();
+            Map<Integer, String> map = new HashMap<>();
+            map.put(id, name);
+            return map;
         }
     }
 }

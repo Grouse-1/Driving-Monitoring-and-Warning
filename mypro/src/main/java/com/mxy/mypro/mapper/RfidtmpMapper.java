@@ -20,4 +20,7 @@ public interface RfidtmpMapper extends BaseMapper<Rfidtmp> {
 
     @Update("update elderly set location_id = #{locationID} where rfidtag = #{rfidID}")
     void updateLocation(@Param("rfidID")String rfidID, @Param("locationID")int locationID);
+
+    @Insert("INSERT into travel (elderid, locationid, Tdate) values ((select id from elderly where rfidtag = #{rfidID}), #{locationID}, #{Tdate})")
+    void updateTravel(@Param("rfidID")String rfidID, @Param("locationID")int locationID, @Param("Tdate")String Tdate);
 }

@@ -111,7 +111,9 @@ const connectWebSocket = () => {
     };
 
     ws.onmessage = (event) => {
-      latestData.value = dict.value[event.data];
+      console.log('接收到消息:', event.data);
+      const dataArray = event.data.split(':');
+      latestData.value = dict.value[dataArray[0]];
       //messages.value.push({ id: messages.value.length, data: event.data });
     };
 

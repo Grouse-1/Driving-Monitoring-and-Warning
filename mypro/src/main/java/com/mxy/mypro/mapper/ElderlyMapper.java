@@ -32,4 +32,7 @@ public interface ElderlyMapper extends BaseMapper<elderly> {
 
     @Select("select name from elderly where id = #{elderid}")
     String getName(Integer elderid);
+
+    @Select("select * from elderly where rfidtag = #{rfid}")
+    List<elderly> getByRFID(String rfid);
 }

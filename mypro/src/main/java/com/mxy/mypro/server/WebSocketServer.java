@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @ServerEndpoint(value = "/elder")
 @Component
@@ -62,12 +64,19 @@ public class WebSocketServer {
         System.out.println(session);
         String text1 = text.replace(" ", "");
         String[] parts = text1.split(":");
+
+        LocalDateTime now = LocalDateTime.now();
+        String formattedTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         if (parts.length > 1) {
             System.out.println("老人定位地点更新");
+            System.out.println("老人出行记录");
             if(parts[0].equals(LocationEnum.PARK.getName())) {
                 rfidtmpService.updateLocation(parts[1], LocationEnum.PARK.getValue());
+                rfidtmpService.updateTravel(parts[1],LocationEnum.PARK.getValue(), formattedTime);
             }else if(parts[0].equals(LocationEnum.MARKET.getName())){
                 rfidtmpService.updateLocation(parts[1], LocationEnum.MARKET.getValue());
+                rfidtmpService.updateTravel(parts[1],LocationEnum.MARKET.getValue(), formattedTime);
             }else{
                 System.out.println("不存在该地点"+parts[0]);
             }

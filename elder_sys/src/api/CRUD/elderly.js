@@ -24,6 +24,7 @@ export const addElderly = {
 
 export const editElderly = {
     edit: (form) => {
+        console.log("formlid:" + form.location_id);
         const formData = new FormData();
         formData.append('id', form.id);
         formData.append('name', form.name);
@@ -33,7 +34,7 @@ export const editElderly = {
         formData.append('age', form.age);
         formData.append('balance', form.balance);
         formData.append('rfidtag', form.rfidtag);
-        formData.append('location_id', form.location_id);
+        formData.append('locationId', form.location_id);
         return axios.post('/api/info/editelderly', formData,
             {
                 headers: {

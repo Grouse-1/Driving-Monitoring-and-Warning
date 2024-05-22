@@ -101,6 +101,8 @@ const size = 'default'
 const direction = ref('horizontal');
 const column = ref(2)
 const Etype = ref('primary')
+const key = ref('')
+key.value = localStorage.getItem('role')
 const form = ref({
   name: '暂无',
   age: '暂无',

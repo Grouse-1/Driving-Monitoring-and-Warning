@@ -1,10 +1,13 @@
 <script setup>
 import {Search} from "@element-plus/icons-vue";
-import {ref, watch} from "vue";
-import {GetFoods} from "@/api/getInfo/index.js";
+import {onMounted, onUnmounted, ref, watch} from "vue";
+import {GetElderly, GetFoods} from "@/api/getInfo/index.js";
 import {ElMessageBox} from "element-plus";
 import {addPay} from "@/api/Pay/index.js";
 import { defineEmits } from 'vue';
+
+let ws = null;
+const latestData = ref('');
 
 const tableData = ref([]);
 const item = ref('')
@@ -14,15 +17,21 @@ const gridData = ref([])
 const currentData = ref({})
 const Fweight = ref()
 const allMoney = ref(0)
-const elder = ref({
-  name: null
-})
+// const elder = ref({
+//   name: null
+// })
+const elderName = ref('')
 const shopId = ref(3)
 const elderId = ref(1)
 const emit = defineEmits(['handleId']);
 const props = defineProps({
   initView: Function
 })
+if(localStorage.getItem('role')==='seller'){
+  shopId.value = localStorage.getItem('shopid')
+  console.log("shopId",shopId.value)
+}
+
 
 const getFood =()=>{
   console.log(item.value)
@@ -86,6 +95,12 @@ const summary = () => {
 
 const getElder = () =>{
 //返回姓名和id,姓名展示，id存储-------------
+  GetElderly.getInfoByRFID(latestData.value).then((res) => {
+    //console.log("res11",res.data)
+    const data = res.data
+    elderId.value = Object.keys(data)[0]
+    elderName.value = Object.values(data)[0]
+  })
 }
 const payConfirm = () => {
   //对tableDate进行判空
@@ -110,6 +125,38 @@ watch(tableData, (newVal, oldVal) => {
 
 }, { deep: true });
 
+const connectWebSocket = () => {
+  // 这里的地址ws://localhost:3000需要替换为你的WebSocket服务端地址
+  ws = new WebSocket('ws://localhost:7799/elder');
+
+  ws.onopen = () => {
+    console.log('WebSocket连接已打开');
+  };
+
+  ws.onmessage = (event) => {
+    console.log('接收到消息:', event.data);
+    latestData.value = event.data;
+    //messages.value.push({ id: messages.value.length, data: event.data });
+  };
+
+  ws.onerror = (error) => {
+    console.error('WebSocket发生错误:', error);
+  };
+
+  ws.onclose = () => {
+    console.log('WebSocket连接已关闭');
+  };
+};
+
+onMounted(() => {
+  connectWebSocket();
+});
+
+onUnmounted(() => {
+  if (ws) {
+    ws.close();
+  }
+});
 </script>
 
 <template>
@@ -175,7 +222,7 @@ watch(tableData, (newVal, oldVal) => {
         </div>
       </el-card>
       <el-dialog v-model="SumVisible" title="结算" width="500">
-        <el-form :model="elder">
+        <el-form>
 
           <el-form-item>
             <el-col :span="24">
@@ -185,8 +232,8 @@ watch(tableData, (newVal, oldVal) => {
                   column="1"
                   border
               >
-                <el-descriptions-item label="顾客姓名" width="150px">
-                  {{elder.name}}<el-button type="success" style="margin-left: 75%" @click="getElder">扫描</el-button>
+                <el-descriptions-item label="顾客姓名" width="150px" style="display: flex">
+                  {{elderName}}<el-button type="success" style="margin-left: auto; float: right" @click="getElder">扫描</el-button>
                 </el-descriptions-item>1
 
                 <el-descriptions-item label="应付金额" width="150px">

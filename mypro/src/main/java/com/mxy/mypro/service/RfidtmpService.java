@@ -44,4 +44,8 @@ public class RfidtmpService {
         System.out.println("locationID:"+locationID);
         rfidtmpMapper.updateLocation(rfidID, locationID);
     }
+
+    public void updateTravel(String rfidID, int locationID, String Tdate) {
+        rfidtmpMapper.updateTravel(rfidID, locationID, Tdate);
+    }
 }

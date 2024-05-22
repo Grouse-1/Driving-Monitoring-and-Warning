@@ -2,6 +2,7 @@ package com.mxy.mypro.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mxy.mypro.entity.EmotionData;
+import com.mxy.mypro.entity.emotionPieChart;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -26,4 +27,7 @@ public interface EmotionMapper extends BaseMapper<EmotionData> {
 
     @Select("SELECT SUM(count) FROM outstate where location = 2 and elderid = #{elderid} and emotion = 'happy'")
     Integer getHappyPCount(String elderid);
+
+    @Select("select  emotion, SUM(count) AS count from outstate where elderid = #{elderid} group by emotion")
+    List<emotionPieChart> selectEmotion(Integer elderid);
 }

@@ -195,6 +195,17 @@ const connectWebSocket = () => {
 const getRfid = () =>{
   form.rfidtag = latestData.value
 }
+watch(()=>form.location, (newData)=>{
+  if(newData === '菜市场'){
+    form.location_id = 1
+  }else if(newData === '公园'){
+    form.location_id = 2
+  }else if(newData === '户外'){
+    form.location_id = 3
+  }else {
+  }
+},{deep:true,immediate:true})
+
 onMounted(() => {
   connectWebSocket();
 });
