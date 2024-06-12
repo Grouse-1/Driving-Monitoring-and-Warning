@@ -231,9 +231,9 @@ onUnmounted(() => {
       <el-form-item label="密码" prop="password">
         <el-input v-model="form.password" />
       </el-form-item>
-      <el-form-item label="权限" prop="auth">
-        <el-input v-model="form.auth" />
-      </el-form-item>
+<!--      <el-form-item label="权限" prop="auth">-->
+<!--        <el-input v-model="form.auth" />-->
+<!--      </el-form-item>-->
       <el-form-item label="性别" prop="sex">
         <el-input v-model="form.sex" />
       </el-form-item>

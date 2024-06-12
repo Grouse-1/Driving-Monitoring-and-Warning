@@ -93,8 +93,7 @@ const deladmin=(date)=>{
       <el-table :data="adminList" stripe  style="width: 100%">
         <el-table-column prop="name" label="姓名" width="200" />
         <el-table-column prop="password" label="密码" width="200" />
-        <el-table-column prop="auth" label="权限" width="200" />
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作" >
           <template #default="{row}">
             <el-button type="primary" size="default" :icon="Edit"  @click="handleDialog(row)">编辑</el-button>
             <el-button type="danger" size="default" :icon="Delete"  @click="deladmin(row)">删除</el-button>

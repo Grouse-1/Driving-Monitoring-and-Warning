@@ -94,7 +94,6 @@ const deladmin=(date)=>{
     <el-table :data="sellerList" stripe  style="width: 100%">
       <el-table-column prop="name" label="账号" width="100" />
       <el-table-column prop="password" label="密码" width="150" />
-      <el-table-column prop="auth" label="权限" width="100" />
       <el-table-column prop="shopname" label="商店名称" width="200" />
       <el-table-column prop="phone" label="电话" width="200" />
       <el-table-column label="操作" width="200">

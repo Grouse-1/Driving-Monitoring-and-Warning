@@ -51,12 +51,33 @@ import { onMounted, ref } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
 
 const menuList = ref([])
+const currentRole = ref('')
+currentRole.value = localStorage.getItem("role")
+const idsToRemove = ref([]);
+
+if(currentRole.value==='family'){
+  idsToRemove.value = [1,5,8,9,10,11,13];
+}
+if(currentRole.value==='seller'){
+  idsToRemove.value = [1,2,3,6,7,8,9,10,11,13,14];
+}
 
 const initMenuList = async () => {
   const res = await GetMenu.menu()
+  console.log(res.data)
   menuList.value = res.data
+  if( currentRole.value !== 'admin'){
+    removeMenuItems(idsToRemove.value)
+  }
 }
 initMenuList()
+
+
+
+function removeMenuItems(ids) {
+  menuList.value = menuList.value.filter(item => !ids.includes(item.id));
+}
+
 </script>
 
 <style lang="scss" scoped>

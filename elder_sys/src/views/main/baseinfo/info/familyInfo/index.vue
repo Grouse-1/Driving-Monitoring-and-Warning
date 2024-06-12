@@ -93,7 +93,6 @@ const deladmin=(date)=>{
     <el-table :data="familyList" stripe  style="width: 100%">
       <el-table-column prop="name" label="姓名" width="100" />
       <el-table-column prop="password" label="密码" width="150" />
-      <el-table-column prop="auth" label="权限" width="100" />
       <el-table-column prop="elderly" label="关联老人" width="150" />
       <el-table-column prop="phone" label="电话" width="150" />
       <el-table-column prop="email" label="邮箱" width="150" />

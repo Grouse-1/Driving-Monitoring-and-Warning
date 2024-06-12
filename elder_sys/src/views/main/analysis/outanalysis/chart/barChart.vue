@@ -19,18 +19,17 @@ watch(()=>props.elderid, async (newDate) => {
   initChart(data.data);
 },{ immediate: true, deep: true})
 // 模拟从后端获取数据
-const fetchData = async () => {
-  // 这里你可以替换成实际的 API 调用
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        park: 10,
-        market: 5,
-      });
-    }, 1000);
-  });
-};
+// const fetchData = async () => {
+//
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve({
+//         park: 10,
+//         market: 5,
+//       });
+//     }, 1000);
+//   });
+// };
 
 const chart = ref(null);
 

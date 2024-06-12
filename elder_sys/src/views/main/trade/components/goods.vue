@@ -127,7 +127,7 @@ watch(tableData, (newVal, oldVal) => {
 
 const connectWebSocket = () => {
   // 这里的地址ws://localhost:3000需要替换为你的WebSocket服务端地址
-  ws = new WebSocket('ws://localhost:7799/elder');
+  ws = new WebSocket('ws://localhost:7799/shop');
 
   ws.onopen = () => {
     console.log('WebSocket连接已打开');
